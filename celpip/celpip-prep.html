@@ -1,0 +1,1069 @@
+<title>CELPIP Prep</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: app de uma coluna para celular; cabeçalho fixo com contagem regressiva, barra de abas fixa embaixo. */
+:root {
+  --bg: #f3f5f4; --surface: #ffffff; --surface-2: #e8edeb; --fg: #17211e; --muted: #5d6b66;
+  --line: #d6deda; --ink: #1d4a40; --ink-fg: #ffffff; --maple: #c8372d; --gold: #d99a1e;
+  --good: #23865a; --bad: #c0392b; --warn: #b7791f;
+  --display: "Space Grotesk", system-ui, sans-serif;
+  --body: "Inter", system-ui, -apple-system, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, monospace;
+  --nav-h: 64px;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0f1513; --surface: #18201d; --surface-2: #222c28; --fg: #e6ece9; --muted: #96a59f;
+  --line: #2c3833; --ink: #3d8a77; --ink-fg: #08110e; --maple: #ef6a5f; --gold: #f0b54a;
+  --good: #4cc08a; --bad: #ef6a5f; --warn: #f0b54a; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #0f1513; --surface: #18201d; --surface-2: #222c28; --fg: #e6ece9; --muted: #96a59f;
+  --line: #2c3833; --ink: #3d8a77; --ink-fg: #08110e; --maple: #ef6a5f; --gold: #f0b54a;
+  --good: #4cc08a; --bad: #ef6a5f; --warn: #f0b54a; color-scheme: dark }
+
+[hidden] { display: none !important; }
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body { background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 15px; line-height: 1.5;
+  padding-bottom: calc(var(--nav-h) + env(safe-area-inset-bottom, 0px) + 16px); }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--ink); }
+header.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 6; background: var(--ink); color: var(--ink-fg);
+  padding-block: 12px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+header.top h1 { font-family: var(--display); font-size: 1.15rem; margin: 0; letter-spacing: .01em; }
+header.top h1 i { font-style: normal; color: var(--gold); }
+.countdown { font-family: var(--mono); font-size: .8rem; text-align: right; line-height: 1.25; opacity: .95; }
+.countdown b { font-size: 1.05rem; }
+main { max-width: 620px; margin: 0 auto; padding-block: 16px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: flex; flex-direction: column; gap: 14px; }
+section.view { display: flex; flex-direction: column; gap: 14px; }
+h2 { font-family: var(--display); font-size: 1.3rem; margin: 0; text-wrap: balance; }
+h3 { font-family: var(--display); font-size: 1.02rem; margin: 0; }
+p { margin: 0; }
+.eyebrow { font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 600; }
+.muted { color: var(--muted); font-size: .88rem; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.prompt { border-left: 3px solid var(--maple); }
+.prompt .body { white-space: pre-wrap; }
+button { font: inherit; font-weight: 600; border: 0; border-radius: 10px; padding: 12px 14px; min-height: 46px; cursor: pointer;
+  background: var(--ink); color: var(--ink-fg); }
+button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+button:disabled { opacity: .45; cursor: default; }
+button.ghost { background: transparent; color: var(--fg); border: 1px solid var(--line); }
+button.maple { background: var(--maple); color: #fff; }
+button.good { background: var(--good); color: #fff; } button.bad { background: var(--bad); color: #fff; } button.warn { background: var(--gold); color: #1b1608; }
+button.small { min-height: 36px; padding: 6px 12px; font-size: .85rem; }
+.row { display: flex; gap: 10px; flex-wrap: wrap; } .row > button { flex: 1 1 0; min-width: 0; }
+.chips { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; }
+.chips button { flex: 0 0 auto; min-height: 38px; padding: 6px 12px; border-radius: 99px; font-size: .85rem; background: var(--surface); color: var(--fg); border: 1px solid var(--line); }
+.chips button.on { background: var(--ink); color: var(--ink-fg); border-color: var(--ink); }
+textarea, input, select { font: inherit; color: var(--fg); background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px; width: 100%; }
+textarea { min-height: 220px; resize: vertical; line-height: 1.55; }
+label.field { display: flex; flex-direction: column; gap: 4px; font-size: .85rem; color: var(--muted); }
+.meter { display: flex; justify-content: space-between; align-items: center; font-family: var(--mono); font-size: .85rem; }
+.timer { font-family: var(--mono); font-size: 1.6rem; font-weight: 500; font-variant-numeric: tabular-nums; }
+.timer.low { color: var(--maple); }
+.pill { display: inline-block; font-size: .72rem; font-weight: 600; padding: 2px 9px; border-radius: 99px; background: var(--surface-2); color: var(--muted); }
+.pill.ok { background: color-mix(in srgb, var(--good) 18%, transparent); color: var(--good); }
+.pill.no { background: color-mix(in srgb, var(--bad) 16%, transparent); color: var(--bad); }
+.pill.mid { background: color-mix(in srgb, var(--warn) 18%, transparent); color: var(--warn); }
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.stat { background: var(--surface-2); border-radius: 10px; padding: 10px 6px; text-align: center; }
+.stat b { display: block; font-family: var(--display); font-size: 1.35rem; font-variant-numeric: tabular-nums; }
+.stat span { font-size: .72rem; color: var(--muted); }
+.clb { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.clb div { background: var(--surface-2); border-radius: 10px; padding: 8px 10px; display: flex; justify-content: space-between; align-items: baseline; gap: 6px; }
+.clb div span { font-size: .8rem; color: var(--muted); }
+.clb div b { font-family: var(--display); font-size: 1.15rem; }
+.overall { display: flex; align-items: baseline; gap: 10px; }
+.overall b { font-family: var(--display); font-size: 2.4rem; color: var(--ink); line-height: 1; }
+.err { border-top: 1px solid var(--line); padding-top: 10px; display: flex; flex-direction: column; gap: 3px; }
+.err s { color: var(--bad); text-decoration-thickness: 1px; }
+.err .fix { color: var(--good); font-weight: 600; }
+.improved { white-space: pre-wrap; background: var(--surface-2); border-radius: 10px; padding: 12px; font-size: .93rem; }
+.opt { text-align: left; background: var(--surface); color: var(--fg); border: 1px solid var(--line); font-weight: 500; width: 100%; }
+.opt.sel { border-color: var(--ink); background: color-mix(in srgb, var(--ink) 12%, var(--surface)); }
+.opt.right { background: var(--good); color: #fff; border-color: var(--good); opacity: 1; }
+.opt.wrong { background: var(--bad); color: #fff; border-color: var(--bad); opacity: 1; }
+.opt:disabled { opacity: 1; }
+.q { display: flex; flex-direction: column; gap: 8px; }
+.q + .q { border-top: 1px solid var(--line); padding-top: 12px; }
+.passage { white-space: pre-wrap; font-size: .95rem; line-height: 1.65; max-height: 55vh; overflow-y: auto; background: var(--surface-2); padding: 12px; border-radius: 10px; }
+.transcript p { margin-bottom: 6px; }
+.transcript b { color: var(--ink); }
+.flash { min-height: 210px; align-items: center; justify-content: center; text-align: center; }
+.flash .word { font-family: var(--display); font-size: 1.9rem; font-weight: 700; word-break: break-word; }
+.ex { font-style: italic; color: var(--muted); }
+.list-item { display: flex; justify-content: space-between; gap: 10px; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--line); }
+.list-item:last-child { border-bottom: 0; }
+.list-item > div { min-width: 0; }
+.hist { display: flex; justify-content: space-between; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--line); font-size: .9rem; }
+.hist:last-child { border-bottom: 0; }
+.bar { height: 8px; border-radius: 99px; background: var(--surface-2); overflow: hidden; }
+.bar > div { height: 100%; background: var(--gold); width: 0; transition: width .3s; }
+.live { min-height: 90px; background: var(--surface-2); border-radius: 10px; padding: 12px; white-space: pre-wrap; }
+.live i { color: var(--muted); }
+.spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid var(--line); border-top-color: var(--ink); border-radius: 50%; animation: spin .8s linear infinite; vertical-align: -2px; margin-right: 6px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .spinner { animation: none; } .bar > div { transition: none; } }
+nav.tabs { position: fixed; left: 0; right: 0; bottom: 0; z-index: 6; display: flex; background: var(--surface); border-top: 1px solid var(--line);
+  padding-bottom: env(safe-area-inset-bottom, 0px); padding-left: env(safe-area-inset-left, 0px); padding-right: env(safe-area-inset-right, 0px); }
+nav.tabs button { flex: 1; min-width: 0; background: transparent; color: var(--muted); border-radius: 0; padding: 8px 2px 10px; min-height: var(--nav-h);
+  display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: .68rem; font-weight: 600; }
+nav.tabs button svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+nav.tabs button.on { color: var(--ink); }
+.notice { font-size: .85rem; background: color-mix(in srgb, var(--gold) 16%, var(--surface)); border: 1px solid color-mix(in srgb, var(--gold) 40%, var(--line)); border-radius: 10px; padding: 10px 12px; }
+.toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(var(--nav-h) + env(safe-area-inset-bottom, 0px) + 12px); background: var(--fg); color: var(--bg);
+  padding: 9px 14px; border-radius: 10px; font-size: .88rem; z-index: 20; max-width: calc(100% - 32px); }
+details summary { cursor: pointer; font-weight: 600; }
+a { color: var(--ink); }
+</style>
+
+<header class="top">
+  <h1>CELPIP <i>Prep</i></h1>
+  <div class="countdown" id="countdown"></div>
+</header>
+
+<main>
+  <!-- ================= PAINEL ================= -->
+  <section class="view" id="v-home">
+    <div class="card">
+      <div class="eyebrow">Seu progresso</div>
+      <div class="stats">
+        <div class="stat"><b id="h-streak">0</b><span>dias seguidos</span></div>
+        <div class="stat"><b id="h-w">–</b><span>Writing</span></div>
+        <div class="stat"><b id="h-s">–</b><span>Speaking</span></div>
+        <div class="stat"><b id="h-lr">–</b><span>List./Read.</span></div>
+      </div>
+      <p class="muted">Writing e Speaking: nível CELPIP estimado (média das 5 últimas). Listening/Reading: % de acerto.</p>
+    </div>
+
+    <div class="card">
+      <div class="eyebrow">Treino de hoje</div>
+      <h3 id="h-plan-title"></h3>
+      <p id="h-plan" class="muted"></p>
+      <div class="row"><button id="h-plan-go">Começar</button></div>
+    </div>
+
+    <div class="card">
+      <div class="row" style="justify-content:space-between;align-items:center">
+        <h3>Histórico</h3><span class="pill" id="h-count">0 treinos</span>
+      </div>
+      <div id="h-hist"><p class="muted">Seus treinos corrigidos aparecem aqui.</p></div>
+    </div>
+
+    <div class="card">
+      <h3>Configurações</h3>
+      <label class="field">Data da prova<input type="date" id="set-date"></label>
+      <label class="field">Nível CLB alvo
+        <select id="set-target">
+          <option value="5">CLB 5</option><option value="6">CLB 6</option><option value="7">CLB 7</option>
+          <option value="8">CLB 8</option><option value="9">CLB 9</option><option value="10">CLB 10</option>
+        </select>
+      </label>
+      <p class="muted" id="storage-note"></p>
+    </div>
+
+    <details class="card">
+      <summary>Como a prova funciona (CELPIP General)</summary>
+      <p class="muted">Quatro partes, feitas no computador, em cerca de 3 horas. Cada habilidade recebe um nível de 1 a 12, equivalente ao CLB. Para imigração (Express Entry), CLB 7 é a referência mais comum e CLB 9 dá bem mais pontos.</p>
+      <p class="muted"><b>Listening</b> (~47–55 min): 6 partes, cada áudio toca só uma vez.<br>
+      <b>Reading</b> (~55–60 min): 4 partes (correspondência, diagrama, informação, pontos de vista).<br>
+      <b>Writing</b> (53 min): Tarefa 1 e-mail (27 min) e Tarefa 2 resposta a pesquisa de opinião (26 min), 150–200 palavras cada.<br>
+      <b>Speaking</b> (~15–20 min): 8 tarefas com tempo de preparo e de fala cronometrados.</p>
+      <p class="muted">A nota que o app dá é uma <b>estimativa</b> feita pela IA. Ela serve para mostrar seus erros e sua evolução, mas não substitui o simulado oficial. Faça os testes práticos gratuitos e pagos em <a href="https://www.celpip.ca" target="_blank" rel="noopener">celpip.ca</a> perto da prova.</p>
+    </details>
+  </section>
+
+  <!-- ================= WRITING ================= -->
+  <section class="view" id="v-writing" hidden>
+    <div class="chips" id="w-tasks"></div>
+    <div class="card prompt">
+      <div class="eyebrow" id="w-label"></div>
+      <div class="body" id="w-prompt"></div>
+      <div class="row">
+        <button class="ghost small" id="w-next">Outro tema</button>
+        <button class="ghost small" id="w-gen">Gerar tema com IA</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="meter">
+        <span class="timer" id="w-timer">27:00</span>
+        <button class="small" id="w-start">Iniciar cronômetro</button>
+      </div>
+      <textarea id="w-text" placeholder="Escreva sua resposta aqui (150–200 palavras)..." spellcheck="false" autocapitalize="sentences"></textarea>
+      <div class="meter"><span id="w-count">0 palavras</span><span class="muted">meta 150–200</span></div>
+      <p class="muted">O corretor ortográfico está desligado, como na prova.</p>
+      <button class="maple" id="w-submit">Corrigir com IA</button>
+    </div>
+    <div id="w-result"></div>
+  </section>
+
+  <!-- ================= SPEAKING ================= -->
+  <section class="view" id="v-speaking" hidden>
+    <div class="chips" id="s-tasks"></div>
+    <div class="card prompt">
+      <div class="eyebrow" id="s-label"></div>
+      <div class="body" id="s-prompt"></div>
+      <div class="row">
+        <button class="ghost small" id="s-listen">Ouvir a pergunta</button>
+        <button class="ghost small" id="s-next">Outro tema</button>
+        <button class="ghost small" id="s-gen">Gerar com IA</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="meter"><span class="eyebrow" id="s-phase">Preparo</span><span class="timer" id="s-timer">0:30</span></div>
+      <div class="row">
+        <button id="s-prep">1. Iniciar preparo</button>
+        <button class="maple" id="s-talk">2. Falar agora</button>
+      </div>
+      <div class="live" id="s-live"><i>Sua fala transcrita aparece aqui.</i></div>
+      <p class="muted" id="s-mic-note"></p>
+      <details>
+        <summary class="muted">Digitar ou colar a resposta</summary>
+        <textarea id="s-typed" style="min-height:120px;margin-top:8px" placeholder="Dica: no Android, toque no microfone do teclado (Gboard) e fale em inglês."></textarea>
+      </details>
+      <button class="maple" id="s-submit">Corrigir com IA</button>
+    </div>
+    <div id="s-result"></div>
+  </section>
+
+  <!-- ================= LISTENING ================= -->
+  <section class="view" id="v-listening" hidden>
+    <div class="chips" id="l-parts"></div>
+    <div class="card">
+      <div class="eyebrow" id="l-label"></div>
+      <p class="muted" id="l-desc"></p>
+      <label class="row" style="align-items:center;gap:8px;font-size:.88rem"><input type="checkbox" id="l-once" style="width:auto" checked> Modo prova (áudio toca uma vez só)</label>
+      <button id="l-gen">Gerar exercício</button>
+    </div>
+    <div id="l-area"></div>
+  </section>
+
+  <!-- ================= READING ================= -->
+  <section class="view" id="v-reading" hidden>
+    <div class="chips" id="r-parts"></div>
+    <div class="card">
+      <div class="eyebrow" id="r-label"></div>
+      <p class="muted" id="r-desc"></p>
+      <button id="r-gen">Gerar exercício</button>
+    </div>
+    <div id="r-area"></div>
+  </section>
+
+  <!-- ================= VOCAB ================= -->
+  <section class="view" id="v-vocab" hidden>
+    <div class="card">
+      <div class="row" style="justify-content:space-between;align-items:center">
+        <h3>Flashcards</h3><span class="pill" id="v-due">0 para revisar</span>
+      </div>
+      <p class="muted">Repetição espaçada: os cartões que você erra voltam logo, os que acerta voltam em 1, 3, 7, 16 dias e assim por diante. As palavras das suas correções entram aqui.</p>
+    </div>
+    <div class="card flash" id="fc">
+      <span class="pill" id="fc-left"></span>
+      <div class="word" id="fc-front"></div>
+      <button class="ghost small" id="fc-say">Ouvir</button>
+      <div id="fc-back" hidden><div style="font-weight:600;font-size:1.1rem" id="fc-pt"></div><div class="ex" id="fc-ex"></div></div>
+    </div>
+    <div id="fc-show"><button style="width:100%" id="fc-reveal">Mostrar resposta</button></div>
+    <div class="row" id="fc-grade" hidden>
+      <button class="bad" data-g="0">Errei</button><button class="warn" data-g="1">Difícil</button><button class="good" data-g="2">Fácil</button>
+    </div>
+    <div class="card" id="fc-empty" hidden><h3>Tudo revisado por agora</h3><p class="muted">Volte amanhã ou adicione palavras novas abaixo.</p></div>
+    <div class="card">
+      <h3>Adicionar palavra ou expressão</h3>
+      <form id="add-form" class="card" style="padding:0;border:0;gap:8px">
+        <input id="in-en" placeholder="Inglês: e.g. I would appreciate it if" autocomplete="off" autocapitalize="off" required>
+        <input id="in-pt" placeholder="Português: eu agradeceria se" autocomplete="off" required>
+        <input id="in-ex" placeholder="Exemplo (opcional)" autocomplete="off">
+        <button type="submit">Adicionar</button>
+      </form>
+    </div>
+    <details class="card"><summary>Todas as palavras (<span id="v-total">0</span>)</summary><div id="v-list"></div></details>
+  </section>
+</main>
+
+<nav class="tabs" id="tabs">
+  <button data-v="home"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Painel</button>
+  <button data-v="writing"><svg viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M14 6l4 4"/></svg>Writing</button>
+  <button data-v="speaking"><svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>Speaking</button>
+  <button data-v="listening"><svg viewBox="0 0 24 24"><path d="M4 14v-2a8 8 0 0 1 16 0v2"/><rect x="3" y="14" width="4" height="6" rx="1.5"/><rect x="17" y="14" width="4" height="6" rx="1.5"/></svg>Listening</button>
+  <button data-v="reading"><svg viewBox="0 0 24 24"><path d="M3 5h6a3 3 0 0 1 3 3v12a2 2 0 0 0-2-2H3zM21 5h-6a3 3 0 0 0-3 3v12a2 2 0 0 1 2-2h7z"/></svg>Reading</button>
+  <button data-v="vocab"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="14" height="14" rx="2"/><path d="M7 3h12a2 2 0 0 1 2 2v12"/></svg>Vocab</button>
+</nav>
+
+<script>
+/* =====================================================================
+   CONTEÚDO
+   ===================================================================== */
+const WRITING = {
+  1: { name: "Tarefa 1 · E-mail", min: 27, prompts: [
+    "You recently stayed at a hotel for three nights. During your stay, there were several problems with your room and the service.\n\nWrite an email to the hotel manager in about 150–200 words. Your email should:\n• describe the problems you experienced\n• explain how these problems affected your stay\n• say what you would like the hotel to do",
+    "A close friend has just moved to your city and asked you for advice about finding a job there.\n\nWrite an email to your friend in about 150–200 words. Your email should:\n• welcome your friend to the city\n• suggest two practical ways to look for work\n• offer to help in a specific way",
+    "Your neighbour has been doing renovations every evening until late at night for the past two weeks.\n\nWrite an email to your neighbour in about 150–200 words. Your email should:\n• explain the situation politely\n• describe how it is affecting you\n• suggest a solution that could work for both of you",
+    "You took an evening course at a local community centre, but the course was cancelled halfway through and you have not received a refund.\n\nWrite an email to the community centre in about 150–200 words. Your email should:\n• give details about the course you registered for\n• explain what happened\n• say what you expect the centre to do",
+    "Your manager has asked employees for suggestions to improve the workplace. You have an idea that you think would help everyone.\n\nWrite an email to your manager in about 150–200 words. Your email should:\n• describe your idea\n• explain why it would be helpful\n• suggest how it could be put into practice",
+    "You borrowed an expensive camera from a coworker for a weekend trip and accidentally damaged it.\n\nWrite an email to your coworker in about 150–200 words. Your email should:\n• apologize and explain what happened\n• describe the damage\n• propose how you will make up for it"
+  ]},
+  2: { name: "Tarefa 2 · Pesquisa de opinião", min: 26, prompts: [
+    "Your city has some extra money in its budget and is considering two projects:\n\nOption A: Build a new public library downtown.\nOption B: Improve bike lanes and walking paths across the city.\n\nChoose the option you prefer. Explain the reasons for your choice in about 150–200 words.",
+    "Your company is deciding how employees should work next year:\n\nOption A: Everyone works from the office five days a week.\nOption B: Employees work from home three days a week.\n\nChoose the option you prefer. Explain the reasons for your choice in about 150–200 words.",
+    "Your local school board is considering a new rule:\n\nOption A: Ban cell phones in all classrooms.\nOption B: Allow cell phones but teach students how to use them responsibly.\n\nChoose the option you prefer. Explain the reasons for your choice in about 150–200 words.",
+    "Your apartment building has money for one improvement:\n\nOption A: A small gym for residents.\nOption B: A shared garden on the rooftop.\n\nChoose the option you prefer. Explain the reasons for your choice in about 150–200 words.",
+    "The government is thinking about how to reduce traffic in large cities:\n\nOption A: Charge drivers a fee to enter the city centre.\nOption B: Make public transit free for everyone.\n\nChoose the option you prefer. Explain the reasons for your choice in about 150–200 words.",
+    "A community centre wants to offer a new free program for adults:\n\nOption A: Financial planning workshops.\nOption B: Cooking classes focused on healthy meals.\n\nChoose the option you prefer. Explain the reasons for your choice in about 150–200 words."
+  ]}
+};
+
+const SPEAKING = {
+  1: { name: "Giving Advice", prep: 30, talk: 90, prompts: [
+    "A friend of yours wants to move to a new city for a better job, but they are worried about leaving their family and friends behind. Give your friend some advice.",
+    "Your coworker is always stressed and has trouble finishing their work on time. Advise your coworker on how to manage their time better.",
+    "A family member wants to start exercising but has never been to a gym. Give them some advice on how to get started."
+  ]},
+  2: { name: "Talking about a Personal Experience", prep: 30, talk: 60, prompts: [
+    "Talk about a time when you had to learn something new very quickly. What was it, and how did you manage?",
+    "Talk about a time when someone helped you in an unexpected way. What happened, and how did you feel?",
+    "Talk about a trip that did not go as planned. What went wrong, and what did you do?"
+  ]},
+  3: { name: "Describing a Scene", prep: 30, talk: 60, prompts: [
+    "(Na prova há uma foto. Aqui a cena é descrita em texto.)\n\nScene: A busy farmers' market on a Saturday morning. On the left, an older man sells vegetables under a green tent. In the centre, a young couple argues about which flowers to buy. A child is dropping an ice cream cone. On the right, a street musician plays the guitar while a dog sleeps next to him. Dark clouds are appearing in the sky.\n\nDescribe this scene to someone who cannot see it, in as much detail as possible.",
+    "(Na prova há uma foto. Aqui a cena é descrita em texto.)\n\nScene: An office break room. A woman is pouring coffee and spilling it because she is looking at her phone. Two coworkers are laughing at a laptop screen. The microwave is open and smoking slightly. A birthday cake sits on the table with one candle. A man is entering with a stack of papers.\n\nDescribe this scene to someone who cannot see it, in as much detail as possible."
+  ]},
+  4: { name: "Making Predictions", prep: 30, talk: 60, prompts: [
+    "Look again at the farmers' market scene (Task 3): the busy market, the arguing couple, the child dropping an ice cream, the musician, the dark clouds. Predict what will probably happen next.",
+    "Look again at the office break room scene (Task 3): the spilling coffee, the laughing coworkers, the smoking microwave, the birthday cake, the man with papers. Predict what will probably happen next."
+  ]},
+  5: { name: "Comparing and Persuading", prep: 60, talk: 60, prompts: [
+    "Your family is choosing a car. You prefer Option A.\n\nOption A: A small electric car. $38,000, low maintenance, 400 km per charge, 4 seats.\nOption B: A used minivan. $24,000, gas, more repairs expected, 7 seats, large trunk.\n\nYour family member prefers Option B. Persuade them that Option A is the better choice.",
+    "You and a friend are planning a vacation. You prefer Option A.\n\nOption A: A cabin by a lake. 5 nights, $900 total, quiet, hiking and canoeing, no Wi-Fi.\nOption B: A hotel in a big city. 3 nights, $1,100 total, museums, restaurants, nightlife.\n\nYour friend prefers Option B. Persuade them that Option A is better."
+  ]},
+  6: { name: "Dealing with a Difficult Situation", prep: 60, talk: 60, prompts: [
+    "You promised to help your best friend move apartments on Saturday. On Friday, your manager asks you to work an important shift on Saturday that could lead to a promotion.\n\nChoose ONE:\n• Talk to your friend and explain why you can't help.\n• Talk to your manager and explain why you can't work.",
+    "Your roommate has been inviting guests over almost every night, and you can't sleep before work. Your roommate is also a good friend.\n\nChoose ONE:\n• Talk to your roommate about the problem.\n• Talk to your landlord and ask for advice."
+  ]},
+  7: { name: "Expressing Opinions", prep: 30, talk: 90, prompts: [
+    "Should children be allowed to have their own smartphones before age 13? Explain your opinion.",
+    "Is it better to rent a home or to buy one? Explain your opinion.",
+    "Should employers allow a four-day work week? Explain your opinion."
+  ]},
+  8: { name: "Describing an Unusual Situation", prep: 30, talk: 60, prompts: [
+    "(Na prova há uma imagem de um objeto incomum.)\n\nYou are in a store and see a chair shaped like a giant hand, made of bright yellow plastic, with a small cup holder on the thumb. Call your friend, who wants to buy furniture, and describe this object in detail.",
+    "(Na prova há uma imagem de um objeto incomum.)\n\nYou see a bicycle with a small roof made of clear plastic, a basket shaped like a dog, and square wheels painted with stars. Call your friend, who collects strange objects, and describe it in detail."
+  ]}
+};
+
+const LISTENING = {
+  1: { name: "Part 1 · Problem Solving", desc: "Conversa entre duas pessoas resolvendo um problema. 8 perguntas na prova.", nq: 6, lines: "14-18" },
+  2: { name: "Part 2 · Daily Life Conversation", desc: "Conversa do dia a dia (loja, vizinhos, trabalho). 5 perguntas.", nq: 5, lines: "10-14" },
+  3: { name: "Part 3 · Listening for Information", desc: "Uma pessoa pede informações e a outra explica. 6 perguntas.", nq: 6, lines: "12-16" },
+  4: { name: "Part 4 · News Item", desc: "Notícia de rádio local, um só locutor. 5 perguntas.", nq: 5, lines: "6-8" },
+  5: { name: "Part 5 · Discussion", desc: "Três pessoas discutindo um assunto (na prova é vídeo). 8 perguntas.", nq: 6, lines: "16-20" },
+  6: { name: "Part 6 · Viewpoints", desc: "Um relato com diferentes pontos de vista sobre um tema. 6 perguntas.", nq: 6, lines: "6-8" }
+};
+const READING = {
+  1: { name: "Part 1 · Correspondence", desc: "Ler uma carta ou e-mail pessoal. 11 perguntas na prova.", min: 11, nq: 8 },
+  2: { name: "Part 2 · Apply a Diagram", desc: "Um diagrama/anúncio e um e-mail sobre ele. Aqui o diagrama vem em texto. 8 perguntas.", min: 9, nq: 6 },
+  3: { name: "Part 3 · Reading for Information", desc: "Texto informativo de 4 parágrafos (A–D). 9 perguntas.", min: 10, nq: 7 },
+  4: { name: "Part 4 · Reading for Viewpoints", desc: "Artigo com opiniões e um comentário de leitor. 10 perguntas.", min: 13, nq: 8 }
+};
+
+const STARTER_VOCAB = [
+  ["I am writing to express my concern about", "escrevo para expressar minha preocupação com", "I am writing to express my concern about the noise in our building."],
+  ["I would appreciate it if you could", "eu agradeceria se você pudesse", "I would appreciate it if you could reply by Friday."],
+  ["I look forward to hearing from you", "aguardo seu retorno", "Thank you for your time. I look forward to hearing from you."],
+  ["As a result", "como resultado", "The bus was late. As a result, I missed my appointment."],
+  ["On the other hand", "por outro lado", "It is cheaper. On the other hand, it takes longer."],
+  ["Furthermore", "além disso (formal)", "Furthermore, the room was not cleaned."],
+  ["In my opinion", "na minha opinião", "In my opinion, Option A is more practical."],
+  ["Not only... but also", "não só... mas também", "It is not only cheaper but also healthier."],
+  ["To make matters worse", "para piorar", "To make matters worse, nobody answered the phone."],
+  ["inconvenience", "transtorno, incômodo", "I apologize for the inconvenience."],
+  ["refund", "reembolso", "I would like a full refund."],
+  ["reimburse", "reembolsar", "Could you reimburse me for the taxi?"],
+  ["compensation", "compensação, indenização", "I believe some compensation is fair."],
+  ["affordable", "acessível (preço)", "Public transit should be affordable."],
+  ["convenient", "conveniente, prático", "The location is very convenient."],
+  ["drawback", "desvantagem", "The main drawback is the cost."],
+  ["benefit", "benefício", "One clear benefit is better health."],
+  ["outweigh", "superar, pesar mais que", "The benefits outweigh the costs."],
+  ["take into account", "levar em conta", "We should take the budget into account."],
+  ["in the long run", "a longo prazo", "In the long run, it saves money."],
+  ["If I were you, I would", "se eu fosse você, eu...", "If I were you, I would talk to your manager."],
+  ["You might want to consider", "talvez você queira considerar", "You might want to consider a part-time course."],
+  ["It's probably going to", "provavelmente vai", "It's probably going to rain in a few minutes."],
+  ["In the foreground / background", "em primeiro plano / ao fundo", "In the background, there is a man with a guitar."],
+  ["On the left-hand side", "no lado esquerdo", "On the left-hand side, an older man is selling vegetables."],
+  ["I completely understand, but", "entendo totalmente, mas", "I completely understand, but I can't make it on Saturday."],
+  ["Let me explain why", "deixe-me explicar por quê", "Let me explain why I think this is the better choice."],
+  ["To sum up", "resumindo", "To sum up, Option A is safer and cheaper."],
+  ["Overall", "no geral", "Overall, it was a disappointing experience."],
+  ["eventually", "no fim, por fim (≠ eventualmente)", "Eventually, the problem was solved."],
+  ["actually", "na verdade (≠ atualmente)", "Actually, I prefer the second option."],
+  ["realize", "perceber (≠ realizar)", "I didn't realize the store was closed."],
+  ["deadline", "prazo final", "The deadline for the application is Monday."],
+  ["landlord", "proprietário (aluguel)", "I called my landlord about the leak."],
+  ["commute", "trajeto casa-trabalho", "My commute takes an hour each way."]
+];
+
+/* =====================================================================
+   ESTADO E ARMAZENAMENTO
+   ===================================================================== */
+const DAY = 86400000;
+const LS_KEY = "celpip-prep-v1";
+const $ = id => document.getElementById(id);
+const today = () => { const d = new Date(); return new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime(); };
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+const mkCard = (en, pt, ex) => ({ id: uid(), en, pt, ex: ex || "", due: 0, interval: 0, ease: 2.5, reps: 0, lapses: 0 });
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+function freshState() {
+  const d = new Date(); d.setMonth(d.getMonth() + 6);
+  return { v: 1, settings: { examDate: d.toISOString().slice(0, 10), target: 7 },
+    cards: STARTER_VOCAB.map(s => mkCard(...s)), log: {}, streak: 0, lastDay: null, idx: { w1: 0, w2: 0 } };
+}
+let S = freshState();
+let attempts = [];
+let cap = { db: null, user: null, sample: null, tts: null, dictation: null };
+let stateRef = null, attemptsCol = null;
+
+function lsGet() { try { return JSON.parse(localStorage.getItem(LS_KEY)); } catch (e) { return null; } }
+function lsSet(v) { try { localStorage.setItem(LS_KEY, JSON.stringify(v)); } catch (e) {} }
+
+let saveTimer = null, saving = false, saveAgain = false;
+function save() { lsSet({ S, attempts: stateRef ? [] : attempts }); clearTimeout(saveTimer); saveTimer = setTimeout(flush, 700); }
+async function flush() {
+  if (!stateRef) return;
+  if (saving) { saveAgain = true; return; }
+  saving = true;
+  try { await stateRef.set(JSON.parse(JSON.stringify(S))); }
+  catch (e) { toast("Não consegui salvar na nuvem. Seus dados estão guardados neste aparelho."); }
+  saving = false;
+  if (saveAgain) { saveAgain = false; flush(); }
+}
+async function addAttempt(a) {
+  a.ts = Date.now(); a.id = uid();
+  attempts.unshift(a);
+  if (attemptsCol) { try { await attemptsCol.doc(a.id).set(a); } catch (e) { toast("Não consegui salvar este treino na nuvem."); } }
+  else lsSet({ S, attempts });
+  bumpActivity(); save(); renderHome();
+}
+function bumpActivity() {
+  const t = today();
+  S.log[t] = (S.log[t] || 0) + 1;
+  if (S.lastDay !== t) { S.streak = S.lastDay === t - DAY ? S.streak + 1 : 1; S.lastDay = t; }
+}
+const streakNow = () => { const t = today(); return (S.lastDay === t || S.lastDay === t - DAY) ? S.streak : 0; };
+
+function withTimeout(p, ms) { return Promise.race([p, new Promise(r => setTimeout(() => r(null), ms))]); }
+
+async function boot() {
+  const local = lsGet();
+  if (local && local.S && Array.isArray(local.S.cards)) { S = local.S; attempts = local.attempts || []; }
+  renderAll();
+  const c = window.claude;
+  if (!c || !c.use) { $("storage-note").textContent = "Seus dados ficam salvos só neste navegador."; applyCaps(); return; }
+  const names = ["db", "user", "sample", "tts", "dictation"];
+  const got = await Promise.all(names.map(n => withTimeout(c.use(n).catch(() => null), 12000)));
+  names.forEach((n, i) => cap[n] = got[i]);
+  applyCaps();
+  if (cap.db && cap.user) {
+    const id = await cap.user.id().catch(() => null);
+    if (id) {
+      stateRef = cap.db.doc("data/users/" + id + "/state");
+      attemptsCol = stateRef.collection("attempts");
+      try {
+        const snap = await withTimeout(stateRef.get(), 10000);
+        if (snap && snap.exists) { const d = snap.data(); if (d && Array.isArray(d.cards)) S = d; }
+        else if (snap) await stateRef.set(JSON.parse(JSON.stringify(S)));
+        const qs = await withTimeout(attemptsCol.orderBy("ts", "desc").limit(200).get(), 10000);
+        if (qs) {
+          const remote = qs.docs.map(d => d.data());
+          const ids = new Set(remote.map(a => a.id));
+          const pending = (local && local.attempts || []).filter(a => !ids.has(a.id));
+          for (const a of pending) { try { await attemptsCol.doc(a.id).set(a); remote.push(a); } catch (e) {} }
+          attempts = remote.sort((a, b) => b.ts - a.ts);
+        }
+        lsSet({ S, attempts: [] });
+        $("storage-note").textContent = "Seus dados ficam salvos na sua conta Claude: são privados e aparecem em qualquer aparelho em que você abrir esta página.";
+      } catch (e) {
+        $("storage-note").textContent = "Não consegui carregar seus dados da nuvem. Usando os dados deste aparelho.";
+      }
+    }
+  } else {
+    $("storage-note").textContent = "Seus dados ficam salvos só neste navegador. Entre na sua conta Claude para salvar na nuvem.";
+  }
+  renderAll();
+}
+
+function applyCaps() {
+  const noAI = !cap.sample;
+  ["w-gen", "s-gen", "l-gen", "r-gen"].forEach(id => $(id).disabled = noAI);
+  if (noAI) {
+    $("w-submit").textContent = "Corrigir (precisa abrir no claude.ai)";
+    $("s-submit").textContent = "Corrigir (precisa abrir no claude.ai)";
+  } else { $("w-submit").textContent = "Corrigir com IA"; $("s-submit").textContent = "Corrigir com IA"; }
+  $("w-submit").disabled = noAI; $("s-submit").disabled = noAI;
+  $("s-mic-note").textContent = cap.dictation
+    ? "Toque em \"Falar agora\" quando o preparo terminar. A gravação para sozinha quando o tempo acaba."
+    : "O ditado por voz não está disponível aqui (ele funciona no Chrome, fora do app do Claude). Use \"Digitar ou colar a resposta\" com o microfone do teclado.";
+  $("s-talk").textContent = cap.dictation ? "2. Falar agora" : "2. Iniciar tempo de fala";
+}
+
+/* =====================================================================
+   VOZ (ouvir)
+   ===================================================================== */
+const VOICES = ["buttery", "glassy", "airy", "rounded"];
+let speaking = false;
+async function say(lines, { rate = 1 } = {}) {
+  if (typeof lines === "string") lines = [{ text: lines, voice: "buttery" }];
+  if (cap.tts) {
+    try { speaking = true; await cap.tts.speak(lines.map(l => ({ text: l.text, voice: l.voice || "buttery", language: "en" })), { rate }); }
+    catch (e) { if (e && e.code === "no_gesture") toast("Toque de novo para ouvir."); else if (e && e.code !== "stopped") return sayBrowser(lines, rate); }
+    finally { speaking = false; }
+    return;
+  }
+  return sayBrowser(lines, rate);
+}
+function sayBrowser(lines, rate) {
+  if (!("speechSynthesis" in window)) { toast("Este navegador não tem voz. Leia a transcrição."); return Promise.resolve(); }
+  speechSynthesis.cancel();
+  const vs = speechSynthesis.getVoices().filter(v => /^en[-_]/i.test(v.lang));
+  const pitches = { buttery: 1, glassy: 1.25, airy: .85, rounded: 1.1 };
+  return new Promise(resolve => {
+    lines.forEach((l, i) => {
+      const u = new SpeechSynthesisUtterance(l.text);
+      u.lang = "en-CA"; u.rate = .95 * rate; u.pitch = pitches[l.voice] || 1;
+      const vi = VOICES.indexOf(l.voice);
+      if (vs.length) u.voice = vs[Math.max(0, vi) % vs.length];
+      if (i === lines.length - 1) { u.onend = resolve; u.onerror = resolve; }
+      speechSynthesis.speak(u);
+    });
+  });
+}
+function stopSay() { if (cap.tts) cap.tts.stop().catch(() => {}); if ("speechSynthesis" in window) speechSynthesis.cancel(); }
+
+/* =====================================================================
+   IA
+   ===================================================================== */
+function aiErr(e) {
+  const m = { not_granted: "Você não permitiu o uso do Claude nesta página. Libere em Permissões do artefato.",
+    rate_limited: "Muitas solicitações agora. Espere um minuto e tente de novo.",
+    invalid_json: "A IA respondeu num formato inesperado. Tente de novo.",
+    cancelled: "Cancelado." };
+  return m[e && e.code] || "Não consegui falar com o Claude agora. Verifique a internet e tente de novo.";
+}
+function thinking(el, msg) { el.innerHTML = `<div class="card"><p><span class="spinner"></span>${esc(msg)}</p><p class="muted">A correção leva de 20 a 60 segundos.</p></div>`; }
+
+/* =====================================================================
+   NAVEGAÇÃO
+   ===================================================================== */
+let view = "home";
+function go(v) {
+  stopSay();
+  view = v;
+  document.querySelectorAll("section.view").forEach(s => s.hidden = s.id !== "v-" + v);
+  document.querySelectorAll("#tabs button").forEach(b => b.classList.toggle("on", b.dataset.v === v));
+  try { history.replaceState(null, "", "#" + v); } catch (e) {}
+  window.scrollTo(0, 0);
+  if (v === "home") renderHome();
+  if (v === "vocab") { nextCard(); renderVocabList(); }
+}
+$("tabs").addEventListener("click", e => { const b = e.target.closest("button"); if (b) go(b.dataset.v); });
+
+let toastT;
+function toast(msg) {
+  let el = document.querySelector(".toast");
+  if (!el) { el = document.createElement("div"); el.className = "toast"; el.setAttribute("role", "status"); document.body.appendChild(el); }
+  el.textContent = msg; el.hidden = false;
+  clearTimeout(toastT); toastT = setTimeout(() => el.hidden = true, 3200);
+}
+
+/* =====================================================================
+   PAINEL
+   ===================================================================== */
+const PLAN = [
+  ["Writing · Tarefa 1", "Escreva um e-mail completo com cronômetro e leia a correção com calma. Depois revise os flashcards.", "writing"],
+  ["Speaking · 3 tarefas", "Faça 3 tarefas diferentes de Speaking respeitando os tempos. Repita a pior delas.", "speaking"],
+  ["Listening · 2 partes", "Faça 2 partes de Listening no modo prova. Releia a transcrição das questões que errou.", "listening"],
+  ["Writing · Tarefa 2", "Responda uma pesquisa de opinião. Foque em dar 2 razões com exemplos concretos.", "writing"],
+  ["Reading · 2 partes", "Faça 2 partes de Reading dentro do tempo. Anote as palavras novas no Vocab.", "reading"],
+  ["Speaking · tarefas 5 a 8", "As tarefas mais difíceis: persuadir, situação difícil, opinião e situação incomum.", "speaking"],
+  ["Revisão da semana", "Revise o vocabulário e refaça uma tarefa de Writing em que tirou nota baixa.", "vocab"]
+];
+function avg(list) { return list.length ? list.reduce((a, b) => a + b, 0) / list.length : null; }
+function renderHome() {
+  const d = new Date(S.settings.examDate + "T00:00:00");
+  const days = Math.ceil((d - today()) / DAY);
+  $("countdown").innerHTML = isNaN(days) ? "" : days >= 0 ? `<b>${days}</b> dias<br>até a prova` : "prova<br>realizada";
+  $("set-date").value = S.settings.examDate; $("set-target").value = String(S.settings.target);
+  $("h-streak").textContent = streakNow();
+  const lvl = sk => { const a = avg(attempts.filter(x => x.skill === sk && x.level).slice(0, 5).map(x => x.level)); return a ? a.toFixed(1) : "–"; };
+  $("h-w").textContent = lvl("writing"); $("h-s").textContent = lvl("speaking");
+  const lr = attempts.filter(x => (x.skill === "listening" || x.skill === "reading") && x.total).slice(0, 6);
+  const pct = lr.length ? Math.round(100 * lr.reduce((a, x) => a + x.score, 0) / lr.reduce((a, x) => a + x.total, 0)) : null;
+  $("h-lr").textContent = pct == null ? "–" : pct + "%";
+  const p = PLAN[new Date().getDay()];
+  $("h-plan-title").textContent = p[0]; $("h-plan").textContent = p[1]; $("h-plan-go").onclick = () => go(p[2]);
+  $("h-count").textContent = attempts.length + (attempts.length === 1 ? " treino" : " treinos");
+  const names = { writing: "Writing", speaking: "Speaking", listening: "Listening", reading: "Reading" };
+  $("h-hist").innerHTML = attempts.length ? attempts.slice(0, 15).map(a => {
+    const t = new Date(a.ts).toLocaleDateString("pt-BR", { day: "2-digit", month: "short" });
+    const target = S.settings.target;
+    let badge;
+    if (a.level) badge = `<span class="pill ${a.level >= target ? "ok" : a.level >= target - 1 ? "mid" : "no"}">nível ${a.level}</span>`;
+    else { const r = a.score / a.total; badge = `<span class="pill ${r >= .8 ? "ok" : r >= .6 ? "mid" : "no"}">${a.score}/${a.total}</span>`; }
+    return `<div class="hist"><div><b>${names[a.skill]}</b> <span class="muted">${esc(a.task || "")}</span></div><div>${badge} <span class="muted">${t}</span></div></div>`;
+  }).join("") : `<p class="muted">Seus treinos corrigidos aparecem aqui. Comece pelo Writing ou pelo Speaking.</p>`;
+}
+$("set-date").addEventListener("change", e => { S.settings.examDate = e.target.value; save(); renderHome(); });
+$("set-target").addEventListener("change", e => { S.settings.target = +e.target.value; save(); renderHome(); });
+
+/* =====================================================================
+   WRITING
+   ===================================================================== */
+let wTask = 1, wPrompt = "", wTimerId = null, wLeft = 0, wStartedAt = 0;
+function renderWTasks() {
+  $("w-tasks").innerHTML = [1, 2].map(n => `<button class="${n === wTask ? "on" : ""}" data-t="${n}">${WRITING[n].name}</button>`).join("");
+}
+$("w-tasks").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; wTask = +b.dataset.t; resetWTimer(); pickW(); renderWTasks(); });
+function pickW(customPrompt) {
+  const t = WRITING[wTask];
+  if (customPrompt) wPrompt = customPrompt;
+  else { const k = "w" + wTask; wPrompt = t.prompts[(S.idx[k] || 0) % t.prompts.length]; }
+  $("w-label").textContent = t.name + " · " + t.min + " min · 150–200 palavras";
+  $("w-prompt").textContent = wPrompt;
+  $("w-result").innerHTML = "";
+}
+$("w-next").onclick = () => { const k = "w" + wTask; S.idx[k] = (S.idx[k] || 0) + 1; save(); resetWTimer(); pickW(); };
+$("w-gen").onclick = async () => {
+  if (!cap.sample) return;
+  $("w-gen").disabled = true; $("w-prompt").innerHTML = '<span class="spinner"></span>Gerando um tema novo...';
+  const kind = wTask === 1
+    ? "a CELPIP General Writing Task 1 (Writing an Email) prompt: a realistic everyday situation in Canada, then 'Write an email to ... in about 150–200 words. Your email should:' followed by exactly three bullet points (•)."
+    : "a CELPIP General Writing Task 2 (Responding to Survey Questions) prompt: a short realistic community/workplace situation, then 'Option A: ...' and 'Option B: ...' on separate lines, then 'Choose the option you prefer. Explain the reasons for your choice in about 150–200 words.'";
+  try {
+    const { text } = await cap.sample("Write " + kind + " Make it original and different from common ones about hotels or libraries. Reply with ONLY the prompt text in English, no title, no commentary.", { modelTier: "quick", cache: false });
+    resetWTimer(); pickW(text.trim());
+  } catch (e) { toast(aiErr(e)); pickW(); }
+  $("w-gen").disabled = false;
+};
+function fmt(s) { s = Math.max(0, Math.round(s)); return Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0"); }
+function resetWTimer() { clearInterval(wTimerId); wTimerId = null; wLeft = WRITING[wTask].min * 60; $("w-timer").textContent = fmt(wLeft); $("w-timer").classList.remove("low"); $("w-start").textContent = "Iniciar cronômetro"; }
+$("w-start").onclick = () => {
+  if (wTimerId) { clearInterval(wTimerId); wTimerId = null; $("w-start").textContent = "Continuar"; return; }
+  if (!wStartedAt) wStartedAt = Date.now();
+  $("w-start").textContent = "Pausar";
+  wTimerId = setInterval(() => {
+    wLeft--; $("w-timer").textContent = fmt(wLeft); $("w-timer").classList.toggle("low", wLeft <= 180);
+    if (wLeft <= 0) { clearInterval(wTimerId); wTimerId = null; $("w-start").textContent = "Tempo esgotado"; toast("Tempo esgotado! Na prova o texto seria entregue agora."); }
+  }, 1000);
+};
+const words = t => (t.trim().match(/[A-Za-z0-9'’-]+/g) || []).length;
+$("w-text").addEventListener("input", () => {
+  const n = words($("w-text").value);
+  $("w-count").textContent = n + " palavras";
+  $("w-count").style.color = n === 0 ? "" : n < 150 ? "var(--warn)" : n > 200 ? "var(--bad)" : "var(--good)";
+  try { sessionStorage.setItem("celpip-w-draft", $("w-text").value); } catch (e) {}
+});
+
+const W_RUBRIC = `CELPIP Writing is rated on 4 dimensions, each on the CELPIP 1–12 scale (equivalent to CLB):
+- Content/Coherence: number and quality of ideas, organization, examples, explanations.
+- Vocabulary: range, precision, appropriate word choice, collocations.
+- Readability: format/paragraphs, connectors and transitions, grammar and sentence variety, spelling, punctuation.
+- Task Fulfillment: relevance, completeness (all bullet points / a clear choice with reasons), tone suitable for the reader, length (150–200 words).`;
+const S_RUBRIC = `CELPIP Speaking is rated on 4 dimensions, each on the CELPIP 1–12 scale (equivalent to CLB):
+- Content/Coherence: number and quality of ideas, organization, examples and supporting details.
+- Vocabulary: range, precision, natural expressions.
+- Listenability: rhythm, pronunciation, grammar and sentence variety, use of connectors. (You only have an automatic transcript, so judge grammar, sentence variety and connectors from the text, and say clearly that pronunciation and intonation could not be evaluated.)
+- Task Fulfillment: relevance, completeness, tone, and appropriate use of the available time.`;
+
+function gradePrompt(kind, task, prompt, answer, extra) {
+  return `You are an experienced, strict but encouraging CELPIP General examiner. The student is a Brazilian Portuguese speaker preparing for the exam in about 6 months; their target is CLB ${S.settings.target}.
+
+${kind === "writing" ? W_RUBRIC : S_RUBRIC}
+
+TASK: ${task}
+PROMPT GIVEN TO THE STUDENT:
+"""${prompt}"""
+
+STUDENT'S ${kind === "writing" ? "RESPONSE" : "SPOKEN RESPONSE (automatic transcript)"}:
+"""${answer}"""
+${extra || ""}
+
+Grade realistically, as the official raters would. Do not inflate levels. Then reply with ONLY a JSON object, no other text, in this exact shape:
+{"levels":{"content":7,"vocabulary":6,"${kind === "writing" ? "readability" : "listenability"}":6,"task":7},
+ "overall":6,
+ "summary_pt":"2-3 frases em português explicando a nota de forma direta",
+ "strengths_pt":["ponto forte em português", "..."],
+ "errors":[{"original":"exact fragment from the student's text","fix":"corrected version","why_pt":"explicação curta em português"}],
+ "improve_pt":["ação concreta em português para subir de nível", "..."],
+ "model":"A model answer in English at about CLB ${Math.min(12, Math.max(9, S.settings.target + 2))}, ${kind === "writing" ? "150–200 words" : "what a strong speaker could say in the time limit"}, keeping the student's ideas where possible.",
+ "vocab":[{"en":"useful word or phrase from the model answer","pt":"tradução","ex":"short example sentence"}]}
+Rules: list up to 10 of the most important errors (grammar, word choice, Portuguese-influenced mistakes), most serious first; if there are none, return an empty list. 3-6 vocab items the student did not use. All levels are integers 1–12. Explanations in Brazilian Portuguese.`;
+}
+
+function renderResult(el, kind, r, extra) {
+  const dims = kind === "writing"
+    ? [["content", "Conteúdo/Coerência"], ["vocabulary", "Vocabulário"], ["readability", "Legibilidade"], ["task", "Cumprimento da tarefa"]]
+    : [["content", "Conteúdo/Coerência"], ["vocabulary", "Vocabulário"], ["listenability", "Clareza (texto)"], ["task", "Cumprimento da tarefa"]];
+  const L = r.levels || {};
+  const target = S.settings.target;
+  const cls = n => n >= target ? "ok" : n >= target - 1 ? "mid" : "no";
+  const list = a => (Array.isArray(a) ? a : []).map(x => `<li>${esc(x)}</li>`).join("");
+  el.innerHTML = `
+  <div class="card">
+    <div class="eyebrow">Nível estimado</div>
+    <div class="overall"><b>${esc(r.overall)}</b><span class="pill ${cls(+r.overall)}">alvo CLB ${target}</span></div>
+    <p>${esc(r.summary_pt)}</p>
+    <div class="clb">${dims.map(([k, n]) => `<div><span>${n}</span><b>${esc(L[k] ?? "–")}</b></div>`).join("")}</div>
+    ${extra || ""}
+  </div>
+  ${r.strengths_pt && r.strengths_pt.length ? `<div class="card"><h3>O que você fez bem</h3><ul style="margin:0;padding-left:20px">${list(r.strengths_pt)}</ul></div>` : ""}
+  <div class="card"><h3>Correções</h3>
+    ${(r.errors || []).length ? r.errors.map(x => `<div class="err"><div><s>${esc(x.original)}</s></div><div class="fix">→ ${esc(x.fix)}</div><div class="muted">${esc(x.why_pt)}</div></div>`).join("") : '<p class="muted">Nenhum erro importante encontrado.</p>'}
+  </div>
+  <div class="card"><h3>Para subir de nível</h3><ul style="margin:0;padding-left:20px">${list(r.improve_pt)}</ul></div>
+  <div class="card"><div class="row" style="justify-content:space-between;align-items:center"><h3>Resposta-modelo</h3>${kind === "speaking" ? '<button class="ghost small" data-act="say-model">Ouvir</button>' : ""}</div>
+    <div class="improved">${esc(r.model)}</div></div>
+  ${(r.vocab || []).length ? `<div class="card"><h3>Vocabulário para aprender</h3>
+    ${r.vocab.map(v => `<div class="list-item"><div><b>${esc(v.en)}</b><div class="muted">${esc(v.pt)}</div></div></div>`).join("")}
+    <button data-act="add-vocab">Adicionar aos flashcards</button></div>` : ""}`;
+  el.querySelector('[data-act="add-vocab"]')?.addEventListener("click", ev => {
+    let n = 0;
+    (r.vocab || []).forEach(v => { if (v.en && v.pt && !S.cards.some(c => c.en.toLowerCase() === String(v.en).toLowerCase())) { S.cards.unshift(mkCard(String(v.en), String(v.pt), String(v.ex || ""))); n++; } });
+    save(); ev.target.disabled = true; ev.target.textContent = n ? `${n} palavras adicionadas` : "Já estavam nos flashcards";
+  });
+  el.querySelector('[data-act="say-model"]')?.addEventListener("click", () => say(String(r.model || "")));
+}
+
+$("w-submit").onclick = async () => {
+  const text = $("w-text").value.trim();
+  const n = words(text);
+  if (n < 40) { toast("Escreva pelo menos 40 palavras para a correção fazer sentido."); return; }
+  if (!cap.sample) return;
+  const used = WRITING[wTask].min * 60 - wLeft;
+  clearInterval(wTimerId); wTimerId = null;
+  $("w-submit").disabled = true;
+  thinking($("w-result"), "Corrigindo seu texto...");
+  $("w-result").scrollIntoView({ behavior: "smooth", block: "start" });
+  try {
+    const extra = `Word count: ${n}.${wStartedAt ? " Time used: " + fmt(used) + " of " + WRITING[wTask].min + ":00." : ""}`;
+    const r = await cap.sample.json(gradePrompt("writing", WRITING[wTask].name.replace("Tarefa", "Task"), wPrompt, text, extra), { modelTier: "default" });
+    if (!r || !r.levels) throw { code: "invalid_json" };
+    renderResult($("w-result"), "writing", r, `<p class="muted">${n} palavras${wStartedAt ? " · " + fmt(used) + " usados" : ""}</p>`);
+    await addAttempt({ skill: "writing", task: "Tarefa " + wTask, level: +r.overall || null, prompt: wPrompt.slice(0, 600), answer: text.slice(0, 3000) });
+    wStartedAt = 0;
+  } catch (e) { $("w-result").innerHTML = `<div class="card"><p>${esc(aiErr(e))}</p></div>`; }
+  $("w-submit").disabled = false;
+};
+
+/* =====================================================================
+   SPEAKING
+   ===================================================================== */
+let sTask = 1, sPrompt = "", sIdx = {}, sTimerId = null, sLeft = 0, sPhase = "idle", transcript = "", partial = "", sTalkUsed = 0;
+function renderSTasks() {
+  $("s-tasks").innerHTML = Object.keys(SPEAKING).map(n => `<button class="${+n === sTask ? "on" : ""}" data-t="${n}">${n}. ${SPEAKING[n].name}</button>`).join("");
+}
+$("s-tasks").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; sTask = +b.dataset.t; renderSTasks(); pickS(); });
+function pickS(custom) {
+  const t = SPEAKING[sTask];
+  sPrompt = custom || t.prompts[(sIdx[sTask] || 0) % t.prompts.length];
+  $("s-label").textContent = `Tarefa ${sTask} · ${t.name} · preparo ${t.prep}s · fala ${t.talk}s`;
+  $("s-prompt").textContent = sPrompt;
+  resetSpeak();
+}
+function resetSpeak() {
+  clearInterval(sTimerId); sTimerId = null; sPhase = "idle";
+  if (cap.dictation && cap.dictation.active()) cap.dictation.stop().catch(() => {});
+  transcript = ""; partial = ""; sTalkUsed = 0;
+  $("s-phase").textContent = "Preparo"; $("s-timer").textContent = fmt(SPEAKING[sTask].prep); $("s-timer").classList.remove("low");
+  $("s-live").innerHTML = "<i>Sua fala transcrita aparece aqui.</i>"; $("s-typed").value = ""; $("s-result").innerHTML = "";
+  $("s-prep").disabled = false; $("s-talk").disabled = false;
+}
+$("s-next").onclick = () => { sIdx[sTask] = (sIdx[sTask] || 0) + 1; pickS(); };
+$("s-listen").onclick = () => say(sPrompt.replace(/\(Na prova[^)]*\)\s*/g, ""));
+$("s-gen").onclick = async () => {
+  if (!cap.sample) return;
+  $("s-gen").disabled = true; $("s-prompt").innerHTML = '<span class="spinner"></span>Gerando...';
+  const t = SPEAKING[sTask];
+  try {
+    const { text } = await cap.sample(`Write one original CELPIP General Speaking Task ${sTask} (${t.name}) prompt, set in everyday life in Canada, in the official style. ${sTask === 3 || sTask === 8 ? "Since no picture can be shown, describe the picture in vivid detail first (start with 'Scene:'), then give the instruction." : ""}${sTask === 5 ? " Include Option A and Option B with 3-4 concrete details each (price, features) and say which option the test-taker prefers and who they must persuade." : ""}${sTask === 6 ? " End with 'Choose ONE:' and two bullet options of who to talk to." : ""}${sTask === 4 ? " Describe a busy scene in detail (start with 'Scene:') and ask what will probably happen next." : ""} Reply with ONLY the prompt in English.`, { modelTier: "quick", cache: false });
+    pickS(text.trim());
+  } catch (e) { toast(aiErr(e)); pickS(); }
+  $("s-gen").disabled = false;
+};
+function tick(onEnd) {
+  clearInterval(sTimerId);
+  sTimerId = setInterval(() => {
+    sLeft--; if (sPhase === "talk") sTalkUsed++;
+    $("s-timer").textContent = fmt(sLeft); $("s-timer").classList.toggle("low", sLeft <= 10);
+    if (sLeft <= 0) { clearInterval(sTimerId); sTimerId = null; onEnd(); }
+  }, 1000);
+}
+$("s-prep").onclick = () => {
+  $("s-result").innerHTML = "";
+  sPhase = "prep"; sLeft = SPEAKING[sTask].prep; $("s-phase").textContent = "Preparo";
+  $("s-timer").textContent = fmt(sLeft); $("s-prep").disabled = true;
+  tick(() => { $("s-phase").textContent = "Preparo encerrado: toque em Falar agora"; $("s-timer").textContent = "0:00"; toast("Tempo de preparo encerrado. Comece a falar!"); });
+};
+function renderLive() {
+  const t = (transcript + (partial ? " " + partial : "")).trim();
+  $("s-live").innerHTML = t ? esc(transcript.trim()) + (partial ? ` <i>${esc(partial)}</i>` : "") : "<i>Ouvindo... comece a falar.</i>";
+}
+let dictBound = false;
+function bindDictation() {
+  if (dictBound || !cap.dictation) return; dictBound = true;
+  cap.dictation.onPartial(({ text }) => { partial = text; renderLive(); });
+  cap.dictation.onFinal(({ text }) => { transcript += (transcript ? text : text.replace(/^\s+/, "")); partial = ""; renderLive(); });
+  cap.dictation.onState(({ state, reason }) => {
+    if (state === "idle" && sPhase === "talk" && reason && !["stopped", "viewer_stopped"].includes(reason)) {
+      if (reason === "hidden") toast("A gravação parou porque a página saiu da tela.");
+      else toast("A gravação parou (" + reason + "). Você pode digitar o resto abaixo.");
+    }
+  });
+}
+$("s-talk").onclick = () => {
+  clearInterval(sTimerId);
+  stopSay();
+  sPhase = "talk"; sLeft = SPEAKING[sTask].talk; sTalkUsed = 0;
+  $("s-phase").textContent = "Fale agora"; $("s-timer").textContent = fmt(sLeft);
+  $("s-prep").disabled = true; $("s-talk").disabled = true;
+  transcript = ""; partial = "";
+  if (cap.dictation) {
+    bindDictation();
+    cap.dictation.start({ language: "en" }).then(renderLive).catch(e => {
+      const c = e && e.code;
+      $("s-live").innerHTML = `<i>${c === "not_granted" ? "Microfone não permitido. Use o campo de texto abaixo." : "Não consegui iniciar o ditado (" + esc(c || "erro") + "). Use o campo de texto abaixo com o microfone do teclado."}</i>`;
+    });
+  }
+  tick(async () => {
+    sPhase = "done"; $("s-phase").textContent = "Tempo encerrado";
+    if (cap.dictation && cap.dictation.active()) { try { await cap.dictation.stop(); } catch (e) {} }
+    $("s-prep").disabled = false; $("s-talk").disabled = false;
+    toast("Tempo encerrado. Toque em Corrigir com IA.");
+  });
+};
+$("s-submit").onclick = async () => {
+  if (cap.dictation && cap.dictation.active()) { try { await cap.dictation.stop(); } catch (e) {} }
+  clearInterval(sTimerId); sTimerId = null;
+  const answer = (transcript.trim() + " " + $("s-typed").value.trim()).trim();
+  if (words(answer) < 10) { toast("Não há fala suficiente para corrigir. Grave ou digite sua resposta."); return; }
+  if (!cap.sample) return;
+  const t = SPEAKING[sTask];
+  $("s-submit").disabled = true;
+  thinking($("s-result"), "Avaliando sua resposta...");
+  $("s-result").scrollIntoView({ behavior: "smooth", block: "start" });
+  try {
+    const n = words(answer);
+    const extra = `Time limit: ${t.talk} seconds.${sTalkUsed ? " The student spoke for about " + sTalkUsed + " seconds." : ""} Word count of transcript: ${n} (a fluent speaker says roughly ${Math.round(t.talk * 2.2)} words in ${t.talk}s). The automatic transcript may contain recognition errors: do not penalize obvious transcription glitches, but do flag real grammar errors.`;
+    const r = await cap.sample.json(gradePrompt("speaking", `Speaking Task ${sTask}: ${t.name}`, sPrompt, answer, extra), { modelTier: "default" });
+    if (!r || !r.levels) throw { code: "invalid_json" };
+    renderResult($("s-result"), "speaking", r, `<p class="muted">${n} palavras${sTalkUsed ? " em " + sTalkUsed + "s" : ""}. Pronúncia e entonação não podem ser avaliadas pela transcrição.</p>`);
+    await addAttempt({ skill: "speaking", task: "Tarefa " + sTask, level: +r.overall || null, prompt: sPrompt.slice(0, 600), answer: answer.slice(0, 3000) });
+  } catch (e) { $("s-result").innerHTML = `<div class="card"><p>${esc(aiErr(e))}</p></div>`; }
+  $("s-submit").disabled = false;
+};
+
+/* =====================================================================
+   LISTENING
+   ===================================================================== */
+let lPart = 1, lEx = null, lPlayed = 0, lAns = [];
+function renderLParts() {
+  $("l-parts").innerHTML = Object.keys(LISTENING).map(n => `<button class="${+n === lPart ? "on" : ""}" data-t="${n}">Part ${n}</button>`).join("");
+  $("l-label").textContent = LISTENING[lPart].name; $("l-desc").textContent = LISTENING[lPart].desc;
+}
+$("l-parts").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; lPart = +b.dataset.t; renderLParts(); });
+$("l-gen").onclick = async () => {
+  if (!cap.sample) return;
+  const p = LISTENING[lPart];
+  $("l-gen").disabled = true; stopSay();
+  $("l-area").innerHTML = `<div class="card"><p><span class="spinner"></span>Criando o áudio e as perguntas...</p><p class="muted">Leva de 20 a 60 segundos.</p></div>`;
+  const speakers = lPart === 4 ? "one news reporter" : lPart === 6 ? "one narrator presenting two contrasting viewpoints" : lPart === 5 ? "three speakers" : "two speakers (one man, one woman)";
+  try {
+    const ex = await cap.sample.json(`Create an original CELPIP General Listening practice item for "${p.name}". ${p.desc}
+Setting: everyday life in Canada. Use natural spoken English with contractions, some hesitation and realistic details (times, prices, names, places). Difficulty: CLB ${S.settings.target}–${S.settings.target + 2}.
+Script: ${p.lines} turns, ${speakers}. The total script should be about ${lPart === 4 || lPart === 6 ? 250 : 330} words.
+Then write ${p.nq} multiple-choice questions in CELPIP style, each with 4 options and only one correct answer. Test details, implied meaning, speaker attitude and reasons, not just repeated words. Distractors must be plausible and mention things from the audio.
+Reply with ONLY JSON:
+{"title":"short English title","context":"one sentence in English that sets the scene before listening",
+ "speakers":[{"name":"Mark","voice":"glassy"}],
+ "script":[{"speaker":"Mark","text":"..."}],
+ "questions":[{"q":"...","options":["...","...","...","..."],"answer":0,"why_pt":"explicação curta em português citando o trecho do áudio"}]}
+Voices available: "glassy", "buttery", "airy", "rounded". Give each speaker a different voice. Vary which option index is correct.`, { modelTier: "default", cache: false });
+    if (!ex || !Array.isArray(ex.script) || !Array.isArray(ex.questions)) throw { code: "invalid_json" };
+    lEx = ex; lPlayed = 0; lAns = ex.questions.map(() => null);
+    renderListening();
+  } catch (e) { $("l-area").innerHTML = `<div class="card"><p>${esc(aiErr(e))}</p></div>`; }
+  $("l-gen").disabled = false;
+};
+function lLines() {
+  const vmap = {}; (lEx.speakers || []).forEach((s, i) => vmap[s.name] = VOICES.includes(s.voice) ? s.voice : VOICES[i % 4]);
+  return lEx.script.map(l => ({ text: String(l.text), voice: vmap[l.speaker] || "buttery" }));
+}
+function renderListening(done) {
+  const once = $("l-once").checked;
+  const canPlay = !once || lPlayed === 0;
+  $("l-area").innerHTML = `
+  <div class="card">
+    <h3>${esc(lEx.title)}</h3>
+    <p class="muted">${esc(lEx.context)}</p>
+    <div class="row">
+      <button id="l-play" ${canPlay ? "" : "disabled"}>${lPlayed ? "Ouvir de novo" : "Ouvir áudio"}</button>
+      <button class="ghost" id="l-stop">Parar</button>
+    </div>
+    <p class="muted">${once ? "Modo prova: você ouve uma vez e as perguntas aparecem depois, como no exame." : "Modo treino: pode ouvir quantas vezes quiser."}</p>
+  </div>
+  <div class="card" id="l-qs" ${lPlayed || done ? "" : "hidden"}>
+    ${lEx.questions.map((q, i) => `<div class="q"><b>${i + 1}. ${esc(q.q)}</b>
+      ${q.options.map((o, j) => `<button class="opt ${lAns[i] === j ? "sel" : ""} ${done ? (j === q.answer ? "right" : lAns[i] === j ? "wrong" : "") : ""}" data-q="${i}" data-o="${j}" ${done ? "disabled" : ""}>${esc(o)}</button>`).join("")}
+      ${done ? `<p class="muted">${esc(q.why_pt)}</p>` : ""}</div>`).join("")}
+    ${done ? "" : `<button class="maple" id="l-check">Conferir respostas</button>`}
+  </div>
+  ${done ? `<details class="card"><summary>Transcrição</summary><div class="transcript">${lEx.script.map(l => `<p><b>${esc(l.speaker)}:</b> ${esc(l.text)}</p>`).join("")}</div></details>` : ""}`;
+  $("l-play").onclick = async () => {
+    lPlayed++; $("l-play").disabled = once;
+    const pr = say(lLines());
+    if (!once) { $("l-qs").hidden = false; }
+    await pr;
+    $("l-qs").hidden = false;
+    if (once) renderListening(done);
+  };
+  $("l-stop").onclick = () => { stopSay(); if (!lPlayed) return; $("l-qs").hidden = false; };
+  $("l-qs").querySelectorAll(".opt").forEach(b => b.onclick = () => { lAns[+b.dataset.q] = +b.dataset.o; b.parentElement.querySelectorAll(".opt").forEach(x => x.classList.toggle("sel", x === b)); });
+  const chk = $("l-check");
+  if (chk) chk.onclick = async () => {
+    if (lAns.some(a => a === null)) { toast("Responda todas as perguntas."); return; }
+    stopSay();
+    const score = lEx.questions.filter((q, i) => q.answer === lAns[i]).length;
+    renderListening(true);
+    toast(`Você acertou ${score} de ${lEx.questions.length}.`);
+    await addAttempt({ skill: "listening", task: "Part " + lPart, score, total: lEx.questions.length });
+  };
+}
+
+/* =====================================================================
+   READING
+   ===================================================================== */
+let rPart = 1, rEx = null, rAns = [], rTimerId = null, rLeft = 0;
+function renderRParts() {
+  $("r-parts").innerHTML = Object.keys(READING).map(n => `<button class="${+n === rPart ? "on" : ""}" data-t="${n}">Part ${n}</button>`).join("");
+  $("r-label").textContent = READING[rPart].name + " · ~" + READING[rPart].min + " min"; $("r-desc").textContent = READING[rPart].desc;
+}
+$("r-parts").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; rPart = +b.dataset.t; renderRParts(); });
+$("r-gen").onclick = async () => {
+  if (!cap.sample) return;
+  const p = READING[rPart];
+  $("r-gen").disabled = true; clearInterval(rTimerId);
+  $("r-area").innerHTML = `<div class="card"><p><span class="spinner"></span>Criando o texto e as perguntas...</p><p class="muted">Leva de 20 a 60 segundos.</p></div>`;
+  const shape = {
+    1: "a personal email or letter (about 300 words) from one friend/relative/colleague to another about a real-life situation.",
+    2: "a diagram rendered as plain text (a schedule, price table, floor plan legend or program list with 4-5 clearly labelled items and details), followed by a separate email (about 150 words) from someone discussing which item to choose. Put the diagram first, then a line '---', then the email.",
+    3: "an informational text of 4 paragraphs labelled A, B, C, D (about 380 words total) on a general-interest topic. Some questions should ask 'Which paragraph contains this information?' with options 'A','B','C','D', and you may include 'Not given' as an option.",
+    4: "a newspaper-style article (about 350 words) presenting different people's viewpoints on a community issue, followed by '---' and a short reader comment (about 100 words) responding to it."
+  }[rPart];
+  try {
+    const ex = await cap.sample.json(`Create an original CELPIP General Reading practice item for "${p.name}". The text is ${shape}
+Setting: Canada, everyday adult life. Difficulty: CLB ${S.settings.target}–${S.settings.target + 2}, natural vocabulary with some idioms and paraphrasing.
+Write ${p.nq} multiple-choice questions in CELPIP style, each with 4 options, one correct. Questions should paraphrase the text (not copy it), testing detail, inference, purpose and vocabulary in context. Distractors must be plausible.
+Reply with ONLY JSON:
+{"title":"...","passage":"the full text with \\n line breaks between paragraphs","questions":[{"q":"...","options":["...","...","...","..."],"answer":0,"why_pt":"explicação curta em português citando o trecho"}]}
+Vary which option index is correct.`, { modelTier: "default", cache: false });
+    if (!ex || !ex.passage || !Array.isArray(ex.questions)) throw { code: "invalid_json" };
+    rEx = ex; rAns = ex.questions.map(() => null);
+    rLeft = p.min * 60; renderReading();
+    clearInterval(rTimerId);
+    rTimerId = setInterval(() => { rLeft--; const el = $("r-timer"); if (el) { el.textContent = fmt(rLeft); el.classList.toggle("low", rLeft <= 60); } if (rLeft <= 0) { clearInterval(rTimerId); toast("Tempo esgotado! Termine e confira."); } }, 1000);
+  } catch (e) { $("r-area").innerHTML = `<div class="card"><p>${esc(aiErr(e))}</p></div>`; }
+  $("r-gen").disabled = false;
+};
+function renderReading(done) {
+  $("r-area").innerHTML = `
+  <div class="card">
+    <div class="meter"><h3>${esc(rEx.title)}</h3><span class="timer" id="r-timer">${fmt(rLeft)}</span></div>
+    <div class="passage">${esc(rEx.passage)}</div>
+  </div>
+  <div class="card">
+    ${rEx.questions.map((q, i) => `<div class="q"><b>${i + 1}. ${esc(q.q)}</b>
+      ${q.options.map((o, j) => `<button class="opt ${rAns[i] === j ? "sel" : ""} ${done ? (j === q.answer ? "right" : rAns[i] === j ? "wrong" : "") : ""}" data-q="${i}" data-o="${j}" ${done ? "disabled" : ""}>${esc(o)}</button>`).join("")}
+      ${done ? `<p class="muted">${esc(q.why_pt)}</p>` : ""}</div>`).join("")}
+    ${done ? "" : `<button class="maple" id="r-check">Conferir respostas</button>`}
+  </div>`;
+  $("r-area").querySelectorAll(".opt").forEach(b => b.onclick = () => { rAns[+b.dataset.q] = +b.dataset.o; b.parentElement.querySelectorAll(".opt").forEach(x => x.classList.toggle("sel", x === b)); });
+  const chk = $("r-check");
+  if (chk) chk.onclick = async () => {
+    if (rAns.some(a => a === null)) { toast("Responda todas as perguntas."); return; }
+    clearInterval(rTimerId);
+    const score = rEx.questions.filter((q, i) => q.answer === rAns[i]).length;
+    const used = READING[rPart].min * 60 - rLeft;
+    renderReading(true);
+    toast(`Você acertou ${score} de ${rEx.questions.length} em ${fmt(used)}.`);
+    await addAttempt({ skill: "reading", task: "Part " + rPart, score, total: rEx.questions.length });
+  };
+}
+
+/* =====================================================================
+   VOCAB (repetição espaçada)
+   ===================================================================== */
+let cur = null;
+const dueCards = () => { const now = Date.now(); return S.cards.filter(c => c.due <= now); };
+function nextCard() {
+  const pool = dueCards().sort((a, b) => ((a.reps === 0 && a.lapses === 0) - (b.reps === 0 && b.lapses === 0)) || a.due - b.due);
+  $("v-due").textContent = pool.length + " para revisar";
+  const empty = !pool.length;
+  $("fc").hidden = empty; $("fc-show").hidden = empty; $("fc-grade").hidden = true; $("fc-empty").hidden = !empty;
+  if (empty) { cur = null; return; }
+  cur = pool[0];
+  $("fc-left").textContent = pool.length + " restantes";
+  $("fc-front").textContent = cur.en; $("fc-pt").textContent = cur.pt; $("fc-ex").textContent = cur.ex;
+  $("fc-back").hidden = true;
+}
+$("fc-say").onclick = () => cur && say(cur.en);
+$("fc-reveal").onclick = () => { $("fc-back").hidden = false; $("fc-show").hidden = true; $("fc-grade").hidden = false; if (cur && cur.ex) say(cur.ex); };
+$("fc-grade").addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b || !cur) return;
+  const q = +b.dataset.g, c = S.cards.find(x => x.id === cur.id);
+  if (q === 0) { c.lapses++; c.reps = 0; c.interval = 0; c.ease = Math.max(1.3, c.ease - .2); c.due = Date.now() + 60000; }
+  else {
+    c.reps++; c.ease = q === 1 ? Math.max(1.3, c.ease - .15) : c.ease + .1;
+    c.interval = c.reps === 1 ? (q === 2 ? 3 : 1) : Math.max(1, Math.round(c.interval * (q === 1 ? 1.2 : c.ease)));
+    c.due = today() + c.interval * DAY;
+  }
+  bumpActivity(); save(); nextCard();
+});
+$("add-form").addEventListener("submit", e => {
+  e.preventDefault();
+  const en = $("in-en").value.trim(), pt = $("in-pt").value.trim(), ex = $("in-ex").value.trim();
+  if (!en || !pt) return;
+  if (S.cards.some(c => c.en.toLowerCase() === en.toLowerCase())) { toast("Essa palavra já está nos flashcards."); return; }
+  S.cards.unshift(mkCard(en, pt, ex)); save(); e.target.reset(); toast("Adicionada."); nextCard(); renderVocabList();
+});
+let armedDelete = null;
+function renderVocabList() {
+  $("v-total").textContent = S.cards.length;
+  $("v-list").innerHTML = S.cards.map(c => {
+    const lvl = c.interval >= 21 ? '<span class="pill ok">dominada</span>' : (c.reps === 0 && c.lapses === 0) ? '<span class="pill">nova</span>' : '<span class="pill mid">aprendendo</span>';
+    return `<div class="list-item"><div><b>${esc(c.en)}</b> ${lvl}<div class="muted">${esc(c.pt)}</div></div><button class="ghost small" data-del="${c.id}">${armedDelete === c.id ? "Confirmar" : "Apagar"}</button></div>`;
+  }).join("");
+}
+$("v-list").addEventListener("click", e => {
+  const b = e.target.closest("[data-del]"); if (!b) return;
+  const id = b.dataset.del;
+  if (armedDelete !== id) { armedDelete = id; renderVocabList(); return; }
+  S.cards = S.cards.filter(c => c.id !== id); armedDelete = null; save(); renderVocabList(); nextCard();
+});
+
+/* =====================================================================
+   INÍCIO
+   ===================================================================== */
+function renderAll() {
+  renderWTasks(); if (!wPrompt) pickW(); resetWTimer();
+  renderSTasks(); if (!sPrompt) pickS();
+  renderLParts(); renderRParts();
+  try { const d = sessionStorage.getItem("celpip-w-draft"); if (d && !$("w-text").value) { $("w-text").value = d; $("w-text").dispatchEvent(new Event("input")); } } catch (e) {}
+  const h = (location.hash || "").slice(1);
+  go(["home", "writing", "speaking", "listening", "reading", "vocab"].includes(h) ? h : view);
+}
+boot();
+</script>
