@@ -681,55 +681,56 @@ function openGuide(k) {
 
 /* ---------- Plano de estudos ---------- */
 // Cada tarefa: [habilidade, nº da tarefa/parte (ou chave do guia), texto, minutos]
+const REAL = "Inglês real: podcast ou vídeo em inglês (ex.: CBC), com legenda em inglês";
 const PHASES = {
   diag: { name: "Diagnóstico", desc: "Descobrir seu nível atual em cada habilidade, sem preparação. Não se preocupe com a nota: ela é o ponto de partida.",
     days: [
-      [["guide", "w1", "Leia o guia da Tarefa 1 de Writing", 5], ["writing", 1, "Writing Tarefa 1 com cronômetro, sem consultar nada", 30]],
-      [["guide", "s0", "Leia as regras gerais do Speaking", 5], ["speaking", 1, "Speaking Tarefa 1 (conselho)", 5], ["speaking", 2, "Speaking Tarefa 2 (experiência)", 5], ["speaking", 7, "Speaking Tarefa 7 (opinião)", 5]],
-      [["listening", 1, "Listening Part 1 no modo prova", 15], ["listening", 3, "Listening Part 3 no modo prova", 15]],
-      [["writing", 2, "Writing Tarefa 2 com cronômetro", 30]],
-      [["reading", 1, "Reading Part 1", 12], ["reading", 3, "Reading Part 3", 12]],
-      [["speaking", 3, "Speaking Tarefa 3 (descrever cena)", 5], ["speaking", 5, "Speaking Tarefa 5 (persuadir)", 5], ["speaking", 6, "Speaking Tarefa 6 (situação difícil)", 5]],
-      [["review", 0, "Veja o Histórico: qual habilidade ficou mais baixa? Ela vai receber mais atenção.", 10], ["vocab", 0, "Revise os flashcards", 10]]
+      [["guide", "w1", "Leia o guia da Tarefa 1 de Writing", 5], ["writing", 1, "Writing Tarefa 1 com cronômetro, sem consultar nada", 30], ["vocab", 0, "Flashcards", 10], ["real", 0, REAL, 15]],
+      [["guide", "s0", "Leia as regras gerais do Speaking", 5], ["speaking", 1, "Speaking Tarefa 1 (conselho) + ler a correção", 10], ["speaking", 2, "Speaking Tarefa 2 (experiência) + ler a correção", 10], ["speaking", 7, "Speaking Tarefa 7 (opinião) + ler a correção", 10], ["listening", 1, "Listening Part 1 no modo prova", 20], ["vocab", 0, "Flashcards", 5]],
+      [["listening", 3, "Listening Part 3 no modo prova", 20], ["listening", 4, "Listening Part 4 no modo prova", 15], ["reading", 1, "Reading Part 1", 15], ["vocab", 0, "Flashcards", 10]],
+      [["guide", "w2", "Leia o guia da Tarefa 2 de Writing", 5], ["writing", 2, "Writing Tarefa 2 com cronômetro", 30], ["speaking", 3, "Speaking Tarefa 3 (descrever cena)", 10], ["vocab", 0, "Flashcards", 15]],
+      [["reading", 3, "Reading Part 3", 20], ["reading", 2, "Reading Part 2", 15], ["listening", 5, "Listening Part 5 no modo prova", 15], ["vocab", 0, "Flashcards", 10]],
+      [["speaking", 5, "Speaking Tarefa 5 (persuadir)", 10], ["speaking", 6, "Speaking Tarefa 6 (situação difícil)", 10], ["speaking", 8, "Speaking Tarefa 8 (objeto incomum)", 10], ["listening", 2, "Listening Part 2 no modo prova", 15], ["real", 0, REAL, 15]],
+      [["review", 0, "Veja o Histórico: qual habilidade ficou mais baixa? Peça ao Claude no chat: \"analisa meu diagnóstico\"", 20], ["review", 0, "Reescreva o texto de Writing com a nota mais baixa, aplicando a correção", 25], ["vocab", 0, "Flashcards", 15]]
     ] },
   base: { name: "Fundamentos", desc: "Aprender o formato e a estrutura de cada tarefa, sem pressa. Aqui o foco é fazer certo, não fazer rápido: pode treinar sem cronômetro.",
     days: [
-      [["guide", "w1", "Releia o guia da Tarefa 1 de Writing", 5], ["writing", 1, "Writing Tarefa 1 seguindo a estrutura do guia (sem cronômetro)", 30], ["vocab", 0, "Flashcards", 10]],
-      [["guide", "s1", "Guias das Tarefas 1 e 2 do Speaking", 5], ["speaking", 1, "Speaking Tarefa 1: faça, leia a correção e refaça", 10], ["speaking", 2, "Speaking Tarefa 2: faça, leia a correção e refaça", 10], ["vocab", 0, "Flashcards", 10]],
-      [["guide", "l0", "Leia as estratégias de Listening", 5], ["listening", 2, "Listening Part 2 no modo treino (pode ouvir de novo)", 15], ["listening", 1, "Listening Part 1, lendo a transcrição no final", 15]],
-      [["guide", "w2", "Leia o guia da Tarefa 2 de Writing", 5], ["writing", 2, "Writing Tarefa 2 seguindo a estrutura do guia", 30], ["vocab", 0, "Flashcards", 10]],
-      [["guide", "r0", "Leia as estratégias de Reading", 5], ["reading", 1, "Reading Part 1", 15], ["reading", 2, "Reading Part 2", 15]],
-      [["guide", "s3", "Guias das Tarefas 3, 4 e 5 do Speaking", 10], ["speaking", 3, "Speaking Tarefa 3", 5], ["speaking", 4, "Speaking Tarefa 4", 5], ["speaking", 5, "Speaking Tarefa 5", 5], ["listening", 3, "Listening Part 3", 15]],
-      [["review", 0, "Reescreva o texto da semana com a nota mais baixa, aplicando a correção", 25], ["vocab", 0, "Flashcards", 10]]
+      [["guide", "w1", "Releia o guia da Tarefa 1 de Writing", 5], ["writing", 1, "Writing Tarefa 1 seguindo a estrutura do guia (sem cronômetro)", 30], ["review", 0, "Reescreva os trechos corrigidos e adicione o vocabulário novo", 15], ["vocab", 0, "Flashcards", 10]],
+      [["guide", "s1", "Guias das Tarefas 1 e 2 do Speaking", 5], ["speaking", 1, "Speaking Tarefa 1: faça, leia a correção e refaça", 15], ["speaking", 2, "Speaking Tarefa 2: faça, leia a correção e refaça", 15], ["listening", 2, "Listening Part 2 no modo treino", 15], ["vocab", 0, "Flashcards", 10]],
+      [["guide", "l0", "Leia as estratégias de Listening", 5], ["listening", 1, "Listening Part 1, lendo a transcrição no final", 20], ["listening", 3, "Listening Part 3, lendo a transcrição no final", 20], ["vocab", 0, "Flashcards", 15]],
+      [["guide", "w2", "Leia o guia da Tarefa 2 de Writing", 5], ["writing", 2, "Writing Tarefa 2 seguindo a estrutura do guia", 30], ["review", 0, "Reescreva os trechos corrigidos", 15], ["vocab", 0, "Flashcards", 10]],
+      [["guide", "r0", "Leia as estratégias de Reading", 5], ["reading", 1, "Reading Part 1", 20], ["reading", 2, "Reading Part 2", 20], ["vocab", 0, "Flashcards", 15]],
+      [["guide", "s3", "Guias das Tarefas 3 a 6 do Speaking", 5], ["speaking", 3, "Speaking Tarefa 3", 10], ["speaking", 4, "Speaking Tarefa 4", 10], ["speaking", 5, "Speaking Tarefa 5", 10], ["speaking", 6, "Speaking Tarefa 6", 10], ["real", 0, REAL, 15]],
+      [["guide", "s7", "Guias das Tarefas 7 e 8 do Speaking", 5], ["speaking", 7, "Speaking Tarefa 7", 10], ["speaking", 8, "Speaking Tarefa 8", 10], ["review", 0, "Refaça a tarefa da semana com a nota mais baixa", 20], ["vocab", 0, "Flashcards", 15]]
     ] },
   practice: { name: "Prática cronometrada", desc: "Tudo com o tempo real da prova. Depois de cada correção, refaça a mesma tarefa: é na segunda tentativa que você aprende.",
     days: [
-      [["writing", 1, "Writing Tarefa 1 com cronômetro (27 min)", 30], ["review", 0, "Reescreva os trechos corrigidos e adicione o vocabulário novo", 15], ["vocab", 0, "Flashcards", 10]],
-      [["speaking", 6, "Speaking Tarefa 6", 5], ["speaking", 7, "Speaking Tarefa 7", 5], ["speaking", 8, "Speaking Tarefa 8", 5], ["listening", 4, "Listening Part 4 no modo prova", 12]],
-      [["reading", 3, "Reading Part 3 cronometrado", 12], ["reading", 4, "Reading Part 4 cronometrado", 15], ["vocab", 0, "Flashcards", 10]],
-      [["writing", 2, "Writing Tarefa 2 com cronômetro (26 min)", 30], ["speaking", 1, "Speaking Tarefa 1", 5], ["speaking", 5, "Speaking Tarefa 5", 5]],
-      [["listening", 5, "Listening Part 5 no modo prova", 15], ["listening", 6, "Listening Part 6 no modo prova", 12], ["reading", 2, "Reading Part 2", 12]],
-      [["speaking", 0, "As 8 tarefas do Speaking em sequência, sem pausa", 25], ["writing", 1, "Writing Tarefa 1 com tema novo", 30]],
-      [["review", 0, "Peça ao Claude no chat: \"analise meus treinos da semana e me diga meus erros mais repetidos\"", 15], ["vocab", 0, "Flashcards", 15]]
+      [["writing", 1, "Writing Tarefa 1 com cronômetro (27 min)", 30], ["review", 0, "Reescreva os trechos corrigidos e adicione o vocabulário novo", 15], ["vocab", 0, "Flashcards", 15]],
+      [["speaking", 6, "Speaking Tarefa 6", 8], ["speaking", 7, "Speaking Tarefa 7", 9], ["speaking", 8, "Speaking Tarefa 8", 8], ["listening", 4, "Listening Part 4 no modo prova", 15], ["listening", 5, "Listening Part 5 no modo prova", 20]],
+      [["reading", 3, "Reading Part 3 cronometrado", 20], ["reading", 4, "Reading Part 4 cronometrado", 25], ["vocab", 0, "Flashcards", 15]],
+      [["writing", 2, "Writing Tarefa 2 com cronômetro (26 min)", 30], ["review", 0, "Reescreva os trechos corrigidos", 10], ["speaking", 1, "Speaking Tarefa 1", 10], ["speaking", 5, "Speaking Tarefa 5", 10]],
+      [["listening", 6, "Listening Part 6 no modo prova", 15], ["listening", 1, "Listening Part 1 no modo prova", 20], ["reading", 2, "Reading Part 2 cronometrado", 15], ["vocab", 0, "Flashcards", 10]],
+      [["speaking", 0, "As 8 tarefas do Speaking em sequência, sem pausa", 25], ["writing", 1, "Writing Tarefa 1 com tema novo", 30], ["vocab", 0, "Flashcards", 5]],
+      [["review", 0, "Peça ao Claude no chat: \"analisa meus treinos da semana e me diz meus erros mais repetidos\"", 15], ["review", 0, "Refaça a tarefa da semana com a nota mais baixa", 20], ["vocab", 0, "Flashcards", 15], ["real", 0, REAL, 10]]
     ] },
-  mock: { name: "Simulados", desc: "Treinar a resistência para a prova inteira e atacar a habilidade mais fraca. Faça pelo menos um simulado oficial (celpip.ca) nesta fase.",
+  mock: { name: "Simulados", desc: "Treinar a resistência para a prova inteira e atacar a habilidade mais fraca. A cada 3 semanas, troque o sábado por um simulado oficial completo (cerca de 3 horas) e descanse no domingo.",
     days: [
-      [["writing", 1, "Writing Tarefa 1 (27 min)", 27], ["writing", 2, "Em seguida, Writing Tarefa 2 (26 min), sem pausa", 26]],
-      [["speaking", 0, "Speaking completo: as 8 tarefas em sequência", 25], ["listening", 1, "Listening Part 1", 15]],
-      [["reading", 1, "Reading Parts 1 a 4 em sequência (~45 min)", 45]],
-      [["listening", 0, "Listening: 3 partes seguidas no modo prova", 40]],
-      [["weak", 0, "Habilidade mais fraca: 2 tarefas extras", 40]],
-      [["mock", 0, "Simulado completo: oficial (celpip.ca) a cada 2–3 semanas; nas outras, faça o dia mais fraco da semana de novo", 120]],
-      [["vocab", 0, "Descanso ativo: só flashcards", 15]]
+      [["writing", 1, "Writing Tarefa 1 (27 min)", 27], ["writing", 2, "Em seguida, Writing Tarefa 2 (26 min), sem pausa", 26], ["vocab", 0, "Flashcards", 7]],
+      [["speaking", 0, "Speaking completo: as 8 tarefas em sequência", 25], ["listening", 1, "Listening Part 1 no modo prova", 20], ["vocab", 0, "Flashcards", 15]],
+      [["reading", 1, "Reading Parts 1 a 4 em sequência", 55], ["vocab", 0, "Flashcards", 5]],
+      [["listening", 0, "Listening: 3 partes seguidas no modo prova", 45], ["vocab", 0, "Flashcards", 15]],
+      [["weak", 0, "Habilidade mais fraca: 3 tarefas extras", 45], ["vocab", 0, "Flashcards", 15]],
+      [["mock", 0, "Refaça as 2 tarefas com pior nota da semana. A cada 3 semanas: simulado oficial completo no celpip.ca (~3 h)", 60]],
+      [["vocab", 0, "Dia leve: flashcards", 15], ["real", 0, REAL, 15]]
     ] },
-  final: { name: "Reta final", desc: "Menos volume e mais confiança. Reveja as estruturas e o vocabulário. Na véspera da prova, descanse.",
+  final: { name: "Reta final", desc: "Mesmo ritmo, menos pressão: rever estruturas, vocabulário e o ponto fraco. Na véspera da prova, descanse.",
     days: [
-      [["writing", 1, "Writing Tarefa 1 com cronômetro", 30]],
-      [["speaking", 0, "As 8 tarefas do Speaking", 25]],
-      [["listening", 5, "Listening Part 5", 15], ["reading", 4, "Reading Part 4", 15]],
-      [["writing", 2, "Writing Tarefa 2 com cronômetro", 30]],
-      [["guide", "s0", "Releia todos os guias de estratégia", 20], ["vocab", 0, "Flashcards", 15]],
-      [["weak", 0, "Uma tarefa da habilidade mais fraca", 20]],
+      [["writing", 1, "Writing Tarefa 1 com cronômetro", 30], ["review", 0, "Reescreva os trechos corrigidos", 15], ["vocab", 0, "Flashcards", 15]],
+      [["guide", "s0", "Releia as regras gerais do Speaking", 10], ["speaking", 0, "As 8 tarefas do Speaking", 25], ["vocab", 0, "Flashcards", 15], ["real", 0, REAL, 10]],
+      [["listening", 5, "Listening Part 5", 20], ["reading", 4, "Reading Part 4", 25], ["vocab", 0, "Flashcards", 15]],
+      [["writing", 2, "Writing Tarefa 2 com cronômetro", 30], ["review", 0, "Reescreva os trechos corrigidos", 15], ["vocab", 0, "Flashcards", 15]],
+      [["guide", "w1", "Releia todos os guias de estratégia", 20], ["speaking", 0, "As 8 tarefas do Speaking", 25], ["vocab", 0, "Flashcards", 15]],
+      [["weak", 0, "Habilidade mais fraca", 40], ["vocab", 0, "Flashcards", 20]],
       [["rest", 0, "Descanso", 0]]
     ] }
 };
@@ -766,7 +767,7 @@ function todayTasks() {
   const dow = (Math.floor((today() - S.plan.start) / DAY)) % 7;
   return { info, title: ph.name + " · dia " + (dow + 1) + " de 7", tasks: ph.days[dow] };
 }
-const SKILL_NAME = { writing: "Writing", speaking: "Speaking", listening: "Listening", reading: "Reading", vocab: "Vocab", guide: "Guia", review: "Revisão", weak: "Ponto fraco", mock: "Simulado", rest: "Descanso" };
+const SKILL_NAME = { writing: "Writing", speaking: "Speaking", listening: "Listening", reading: "Reading", vocab: "Vocab", guide: "Guia", review: "Revisão", weak: "Ponto fraco", mock: "Simulado", rest: "Descanso", real: "Inglês real" };
 function startTask(t) {
   const [skill, n] = t;
   if (skill === "guide") return openGuide(n);
@@ -788,7 +789,7 @@ function renderPlan() {
   $("p-tasks").innerHTML = tasks.map((t, i) => {
     const ok = done.includes(i);
     const label = t[0] === "weak" ? t[2] + " (" + SKILL_NAME[weakestSkill()] + ")" : t[2];
-    const canGo = !["review", "rest", "mock"].includes(t[0]);
+    const canGo = !["review", "rest", "mock", "real"].includes(t[0]);
     const link = t[0] === "mock" ? `<a href="https://www.celpip.ca" target="_blank" rel="noopener" class="muted" style="font-size:.85rem">celpip.ca</a>` : "";
     return `<div class="list-item">
       <label style="display:flex;gap:10px;align-items:flex-start;flex:1;min-width:0;cursor:pointer">
