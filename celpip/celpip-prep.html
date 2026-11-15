@@ -129,6 +129,15 @@ a { color: var(--ink); }
   <!-- ================= PAINEL ================= -->
   <section class="view" id="v-home">
     <div class="card">
+      <div class="row" style="justify-content:space-between;align-items:center">
+        <div class="eyebrow">Hoje · <span id="p-day"></span></div><span class="pill" id="p-mins"></span>
+      </div>
+      <h3 id="p-title"></h3>
+      <div id="p-tasks"></div>
+      <div class="bar"><div id="p-bar"></div></div>
+    </div>
+
+    <div class="card">
       <div class="eyebrow">Seu progresso</div>
       <div class="stats">
         <div class="stat"><b id="h-streak">0</b><span>dias seguidos</span></div>
@@ -140,10 +149,22 @@ a { color: var(--ink); }
     </div>
 
     <div class="card">
-      <div class="eyebrow">Treino de hoje</div>
-      <h3 id="h-plan-title"></h3>
-      <p id="h-plan" class="muted"></p>
-      <div class="row"><button id="h-plan-go">Começar</button></div>
+      <div class="row" style="justify-content:space-between;align-items:center">
+        <h3>Plano de estudos</h3><span class="pill" id="p-week"></span>
+      </div>
+      <p class="muted" id="p-phase-desc"></p>
+      <div id="p-phases"></div>
+      <details>
+        <summary class="muted">Reiniciar o plano a partir de hoje</summary>
+        <p class="muted" style="margin:8px 0">Use isso se você ficou muito tempo parado ou mudou a data da prova. Seu histórico e seus flashcards não são apagados.</p>
+        <button class="ghost small" id="p-restart">Reiniciar plano hoje</button>
+      </details>
+    </div>
+
+    <div class="card">
+      <h3>Como fazer cada parte da prova</h3>
+      <p class="muted">Estratégias e estruturas para cada tarefa. Leia o guia antes de treinar uma tarefa pela primeira vez.</p>
+      <div id="guides"></div>
     </div>
 
     <div class="card">
@@ -583,15 +604,226 @@ function toast(msg) {
 /* =====================================================================
    PAINEL
    ===================================================================== */
-const PLAN = [
-  ["Writing · Tarefa 1", "Escreva um e-mail completo com cronômetro e leia a correção com calma. Depois revise os flashcards.", "writing"],
-  ["Speaking · 3 tarefas", "Faça 3 tarefas diferentes de Speaking respeitando os tempos. Repita a pior delas.", "speaking"],
-  ["Listening · 2 partes", "Faça 2 partes de Listening no modo prova. Releia a transcrição das questões que errou.", "listening"],
-  ["Writing · Tarefa 2", "Responda uma pesquisa de opinião. Foque em dar 2 razões com exemplos concretos.", "writing"],
-  ["Reading · 2 partes", "Faça 2 partes de Reading dentro do tempo. Anote as palavras novas no Vocab.", "reading"],
-  ["Speaking · tarefas 5 a 8", "As tarefas mais difíceis: persuadir, situação difícil, opinião e situação incomum.", "speaking"],
-  ["Revisão da semana", "Revise o vocabulário e refaça uma tarefa de Writing em que tirou nota baixa.", "vocab"]
-];
+/* ---------- Guias de estratégia ---------- */
+const GUIDES = {
+  w1: ["Writing · Tarefa 1 · E-mail", `Objetivo: responder aos 3 tópicos pedidos, com o tom certo para quem vai ler.
+
+Estrutura (cerca de 180 palavras):
+1. Saudação de acordo com a relação: "Dear Mr. Smith," (formal) ou "Hi Sarah," (amigo).
+2. Abertura (1–2 frases) dizendo o motivo do e-mail: "I am writing to complain about my recent stay at..."
+3. Um parágrafo para cada tópico, na mesma ordem do enunciado. Dê detalhes concretos: datas, valores, nomes, quanto tempo.
+4. Fechamento com um pedido claro: "I would appreciate it if you could... I look forward to hearing from you."
+5. Despedida: "Sincerely, / Best regards," (formal) ou "Take care," (informal), e seu nome.
+
+Distribuição do tempo (27 min): 3 min planejando os tópicos, 20 min escrevendo, 4 min revisando.
+Erros que mais derrubam a nota: esquecer um dos tópicos, tom informal demais com um gerente, escrever menos de 150 palavras, um bloco único de texto sem parágrafos.`],
+  w2: ["Writing · Tarefa 2 · Pesquisa de opinião", `Objetivo: escolher UMA opção e defender a escolha com razões bem explicadas.
+
+Estrutura (cerca de 180 palavras):
+1. Introdução: diga logo qual opção você escolhe. "In my opinion, Option B is the better choice for our city."
+2. Razão 1 + explicação + exemplo concreto.
+3. Razão 2 + explicação + exemplo concreto.
+4. (Opcional, mas ajuda no nível 9+) Reconheça o outro lado e rebata: "Although Option A would..., I believe..."
+5. Conclusão de 1 frase retomando a escolha.
+
+Dicas: não fique em cima do muro e não escolha as duas opções. Duas razões bem desenvolvidas valem mais que quatro jogadas. Use conectivos variados: Firstly, In addition, For instance, On the other hand, Therefore.
+Tempo (26 min): 3 min para escolher e listar as razões, 19 min escrevendo, 4 min revisando.`],
+  s0: ["Speaking · Regras gerais", `• Use o tempo de preparo para anotar só palavras-chave, não frases inteiras.
+• Fale até o tempo acabar. Terminar muito cedo derruba a nota de Cumprimento da tarefa.
+• Fale num ritmo natural. Se errar, corrija rapidamente e siga em frente.
+• Fale diretamente com a pessoa citada na tarefa ("Hi Mike, I heard you're thinking about...").
+• Sempre tenha uma estrutura: abertura, 2–3 pontos com detalhes, fechamento.
+• Varie o vocabulário: não repita "good" e "nice"; use "convenient", "affordable", "rewarding".`],
+  s1: ["Speaking · Tarefa 1 · Giving Advice (90 s)", `Estrutura: cumprimente a pessoa e mostre que entendeu o problema → 2 ou 3 conselhos, cada um com o motivo → incentivo final.
+Frases úteis: "If I were you, I would...", "Have you considered...?", "Another thing you could do is...", "This way, you'll be able to..."
+90 segundos é bastante tempo: desenvolva cada conselho com um exemplo.`],
+  s2: ["Speaking · Tarefa 2 · Personal Experience (60 s)", `Estrutura: quando e onde → o que aconteceu (em ordem) → como você se sentiu → o que aprendeu.
+Use os tempos do passado corretamente: "I was working when...", "I had never... before". Escolha uma história simples e concreta: você não precisa de uma história impressionante, precisa de detalhes.`],
+  s3: ["Speaking · Tarefa 3 · Describing a Scene (60 s)", `Estrutura: visão geral em 1 frase ("This picture shows a busy market on a sunny day") → descreva por áreas (on the left, in the middle, in the background, in the foreground) → pessoas: quem são, o que estão fazendo e o que parecem sentir → detalhes e clima.
+Use o present continuous: "A man is selling...", "Two kids are running...". Quem ouve não vê a imagem: seja visual e específico (cores, tamanhos, posições).`],
+  s4: ["Speaking · Tarefa 4 · Making Predictions (60 s)", `Escolha 3 ou 4 pessoas ou situações da cena e preveja o que vai acontecer com cada uma, com um motivo baseado no que se vê.
+Varie as formas: "will", "is going to", "is likely to", "might", "I bet...", "Judging by..., I think...".
+Não descreva a cena de novo: fale do futuro.`],
+  s5: ["Speaking · Tarefa 5 · Comparing and Persuading (60 s)", `Primeiro você escolhe uma opção; depois tem que convencer alguém que prefere outra.
+Estrutura: mostre que entende a preferência da pessoa → compare ponto a ponto (preço, praticidade, tempo) usando comparativos ("cheaper than", "much more convenient") → responda à objeção principal dela → feche com um pedido ("So, what do you say?").
+Use os números e detalhes das opções: é isso que mostra que você leu as informações.`],
+  s6: ["Speaking · Tarefa 6 · Difficult Situation (60 s)", `Escolha UMA das duas pessoas e fale diretamente com ela.
+Estrutura: abertura gentil → explique a situação com honestidade → mostre empatia e peça desculpas se couber → dê seus motivos → ofereça uma alternativa ou solução concreta.
+Frases: "I really hate to do this, but...", "I hope you understand...", "How about if I...?", "I'll make it up to you."
+O tom é avaliado: seja educado e direto.`],
+  s7: ["Speaking · Tarefa 7 · Expressing Opinions (90 s)", `Estrutura: opinião clara na primeira frase → razão 1 com exemplo → razão 2 com exemplo → (opcional) reconheça o outro lado → conclusão repetindo a opinião.
+Igual ao Writing Tarefa 2, só que falado. Tenha frases prontas: "I strongly believe that...", "The main reason is...", "For example, in my own experience...", "That's why I think..."`],
+  s8: ["Speaking · Tarefa 8 · Unusual Situation (60 s)", `Você descreve um objeto estranho para alguém que não está vendo.
+Estrutura: o que é, de modo geral → forma e tamanho (compare com objetos conhecidos: "about the size of a fridge") → cor e material → partes e detalhes → para que serve e por que a pessoa poderia querer.
+Vocabulário útil: shaped like, made of, on top of, attached to, it looks like, roughly, round/square/oval.`],
+  l0: ["Listening · Estratégias", `• Cada áudio toca uma vez só. Treine no modo prova desde o início.
+• Na maioria das partes, as perguntas só aparecem depois do áudio: preste atenção em quem fala, no problema, na decisão final e nos motivos.
+• Pegadinha clássica: a alternativa errada repete palavras que você ouviu. A certa costuma dizer a mesma ideia com outras palavras.
+• Fique atento a mudanças de plano: "actually", "but", "on second thought", "I'd rather".
+• Perguntas de atitude ("How does the woman feel?") dependem do tom e das escolhas de palavras, não só dos fatos.
+• Confira no celpip.ca as regras atualizadas sobre anotações durante a prova.`],
+  r0: ["Reading · Estratégias", `• Leia as perguntas antes do texto e procure as respostas no texto.
+• A resposta certa quase sempre é uma paráfrase: as mesmas ideias com outras palavras. Desconfie da alternativa que copia o texto.
+• Part 2 (diagrama): cruze as informações do diagrama com as do e-mail; as perguntas misturam os dois.
+• Part 3: as perguntas de "qual parágrafo" pedem uma leitura rápida de cada parágrafo para pegar a ideia principal. "Not given" significa que a informação não aparece em lugar nenhum.
+• Part 4: separe a opinião de cada pessoa da opinião do autor do artigo.
+• Controle o tempo: se uma pergunta travar, responda o mais provável e siga em frente. Não deixe nenhuma em branco.`]
+};
+function renderGuides() {
+  $("guides").innerHTML = Object.entries(GUIDES).map(([k, [t, body]]) =>
+    `<details id="g-${k}" style="border-top:1px solid var(--line);padding-top:8px"><summary>${esc(t)}</summary><p class="muted" style="white-space:pre-wrap;margin-top:8px">${esc(body)}</p></details>`).join("");
+}
+function openGuide(k) {
+  go("home");
+  const el = $("g-" + k); if (!el) return;
+  el.open = true; setTimeout(() => el.scrollIntoView({ behavior: "smooth", block: "start" }), 50);
+}
+
+/* ---------- Plano de estudos ---------- */
+// Cada tarefa: [habilidade, nº da tarefa/parte (ou chave do guia), texto, minutos]
+const PHASES = {
+  diag: { name: "Diagnóstico", desc: "Descobrir seu nível atual em cada habilidade, sem preparação. Não se preocupe com a nota: ela é o ponto de partida.",
+    days: [
+      [["guide", "w1", "Leia o guia da Tarefa 1 de Writing", 5], ["writing", 1, "Writing Tarefa 1 com cronômetro, sem consultar nada", 30]],
+      [["guide", "s0", "Leia as regras gerais do Speaking", 5], ["speaking", 1, "Speaking Tarefa 1 (conselho)", 5], ["speaking", 2, "Speaking Tarefa 2 (experiência)", 5], ["speaking", 7, "Speaking Tarefa 7 (opinião)", 5]],
+      [["listening", 1, "Listening Part 1 no modo prova", 15], ["listening", 3, "Listening Part 3 no modo prova", 15]],
+      [["writing", 2, "Writing Tarefa 2 com cronômetro", 30]],
+      [["reading", 1, "Reading Part 1", 12], ["reading", 3, "Reading Part 3", 12]],
+      [["speaking", 3, "Speaking Tarefa 3 (descrever cena)", 5], ["speaking", 5, "Speaking Tarefa 5 (persuadir)", 5], ["speaking", 6, "Speaking Tarefa 6 (situação difícil)", 5]],
+      [["review", 0, "Veja o Histórico: qual habilidade ficou mais baixa? Ela vai receber mais atenção.", 10], ["vocab", 0, "Revise os flashcards", 10]]
+    ] },
+  base: { name: "Fundamentos", desc: "Aprender o formato e a estrutura de cada tarefa, sem pressa. Aqui o foco é fazer certo, não fazer rápido: pode treinar sem cronômetro.",
+    days: [
+      [["guide", "w1", "Releia o guia da Tarefa 1 de Writing", 5], ["writing", 1, "Writing Tarefa 1 seguindo a estrutura do guia (sem cronômetro)", 30], ["vocab", 0, "Flashcards", 10]],
+      [["guide", "s1", "Guias das Tarefas 1 e 2 do Speaking", 5], ["speaking", 1, "Speaking Tarefa 1: faça, leia a correção e refaça", 10], ["speaking", 2, "Speaking Tarefa 2: faça, leia a correção e refaça", 10], ["vocab", 0, "Flashcards", 10]],
+      [["guide", "l0", "Leia as estratégias de Listening", 5], ["listening", 2, "Listening Part 2 no modo treino (pode ouvir de novo)", 15], ["listening", 1, "Listening Part 1, lendo a transcrição no final", 15]],
+      [["guide", "w2", "Leia o guia da Tarefa 2 de Writing", 5], ["writing", 2, "Writing Tarefa 2 seguindo a estrutura do guia", 30], ["vocab", 0, "Flashcards", 10]],
+      [["guide", "r0", "Leia as estratégias de Reading", 5], ["reading", 1, "Reading Part 1", 15], ["reading", 2, "Reading Part 2", 15]],
+      [["guide", "s3", "Guias das Tarefas 3, 4 e 5 do Speaking", 10], ["speaking", 3, "Speaking Tarefa 3", 5], ["speaking", 4, "Speaking Tarefa 4", 5], ["speaking", 5, "Speaking Tarefa 5", 5], ["listening", 3, "Listening Part 3", 15]],
+      [["review", 0, "Reescreva o texto da semana com a nota mais baixa, aplicando a correção", 25], ["vocab", 0, "Flashcards", 10]]
+    ] },
+  practice: { name: "Prática cronometrada", desc: "Tudo com o tempo real da prova. Depois de cada correção, refaça a mesma tarefa: é na segunda tentativa que você aprende.",
+    days: [
+      [["writing", 1, "Writing Tarefa 1 com cronômetro (27 min)", 30], ["review", 0, "Reescreva os trechos corrigidos e adicione o vocabulário novo", 15], ["vocab", 0, "Flashcards", 10]],
+      [["speaking", 6, "Speaking Tarefa 6", 5], ["speaking", 7, "Speaking Tarefa 7", 5], ["speaking", 8, "Speaking Tarefa 8", 5], ["listening", 4, "Listening Part 4 no modo prova", 12]],
+      [["reading", 3, "Reading Part 3 cronometrado", 12], ["reading", 4, "Reading Part 4 cronometrado", 15], ["vocab", 0, "Flashcards", 10]],
+      [["writing", 2, "Writing Tarefa 2 com cronômetro (26 min)", 30], ["speaking", 1, "Speaking Tarefa 1", 5], ["speaking", 5, "Speaking Tarefa 5", 5]],
+      [["listening", 5, "Listening Part 5 no modo prova", 15], ["listening", 6, "Listening Part 6 no modo prova", 12], ["reading", 2, "Reading Part 2", 12]],
+      [["speaking", 0, "As 8 tarefas do Speaking em sequência, sem pausa", 25], ["writing", 1, "Writing Tarefa 1 com tema novo", 30]],
+      [["review", 0, "Peça ao Claude no chat: \"analise meus treinos da semana e me diga meus erros mais repetidos\"", 15], ["vocab", 0, "Flashcards", 15]]
+    ] },
+  mock: { name: "Simulados", desc: "Treinar a resistência para a prova inteira e atacar a habilidade mais fraca. Faça pelo menos um simulado oficial (celpip.ca) nesta fase.",
+    days: [
+      [["writing", 1, "Writing Tarefa 1 (27 min)", 27], ["writing", 2, "Em seguida, Writing Tarefa 2 (26 min), sem pausa", 26]],
+      [["speaking", 0, "Speaking completo: as 8 tarefas em sequência", 25], ["listening", 1, "Listening Part 1", 15]],
+      [["reading", 1, "Reading Parts 1 a 4 em sequência (~45 min)", 45]],
+      [["listening", 0, "Listening: 3 partes seguidas no modo prova", 40]],
+      [["weak", 0, "Habilidade mais fraca: 2 tarefas extras", 40]],
+      [["mock", 0, "Simulado completo: oficial (celpip.ca) a cada 2–3 semanas; nas outras, faça o dia mais fraco da semana de novo", 120]],
+      [["vocab", 0, "Descanso ativo: só flashcards", 15]]
+    ] },
+  final: { name: "Reta final", desc: "Menos volume e mais confiança. Reveja as estruturas e o vocabulário. Na véspera da prova, descanse.",
+    days: [
+      [["writing", 1, "Writing Tarefa 1 com cronômetro", 30]],
+      [["speaking", 0, "As 8 tarefas do Speaking", 25]],
+      [["listening", 5, "Listening Part 5", 15], ["reading", 4, "Reading Part 4", 15]],
+      [["writing", 2, "Writing Tarefa 2 com cronômetro", 30]],
+      [["guide", "s0", "Releia todos os guias de estratégia", 20], ["vocab", 0, "Flashcards", 15]],
+      [["weak", 0, "Uma tarefa da habilidade mais fraca", 20]],
+      [["rest", 0, "Descanso", 0]]
+    ] }
+};
+const PHASE_ORDER = ["diag", "base", "practice", "mock", "final"];
+function dayKey(t) { const d = new Date(t); return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); }
+function planInfo() {
+  if (!S.plan) { S.plan = { start: today(), done: {} }; save(); }
+  const start = S.plan.start, exam = new Date(S.settings.examDate + "T00:00:00").getTime();
+  const totalW = Math.max(1, Math.ceil((exam - start) / (7 * DAY)));
+  const week = Math.floor((today() - start) / (7 * DAY)) + 1;
+  // tamanho das fases: 1 semana de diagnóstico, 2 de reta final; o resto dividido 35/40/25
+  const rest = Math.max(0, totalW - 3);
+  let b = Math.round(rest * .35), p = Math.round(rest * .40), m = Math.max(0, rest - b - p);
+  if (totalW < 6) { b = 0; p = Math.max(0, totalW - 3); m = 0; }
+  const sizes = { diag: 1, base: b, practice: p, mock: m, final: Math.min(2, Math.max(0, totalW - 1)) };
+  let acc = 0, phase = "final"; const ranges = [];
+  for (const k of PHASE_ORDER) { if (!sizes[k]) continue; ranges.push([k, acc + 1, acc + sizes[k]]); if (week > acc && week <= acc + sizes[k]) phase = k; acc += sizes[k]; }
+  const daysToExam = Math.round((exam - today()) / DAY);
+  return { week, totalW, phase, ranges, daysToExam };
+}
+function weakestSkill() {
+  const sc = {};
+  ["writing", "speaking"].forEach(s => { const a = avg(attempts.filter(x => x.skill === s && x.level).slice(0, 5).map(x => x.level)); if (a) sc[s] = a / 12; });
+  ["listening", "reading"].forEach(s => { const l = attempts.filter(x => x.skill === s && x.total).slice(0, 5); if (l.length) sc[s] = l.reduce((a, x) => a + x.score, 0) / l.reduce((a, x) => a + x.total, 0); });
+  const e = Object.entries(sc).sort((a, b) => a[1] - b[1]);
+  return e.length ? e[0][0] : "speaking";
+}
+function todayTasks() {
+  const info = planInfo();
+  if (info.daysToExam === 0) return { info, title: "Dia da prova. Boa sorte!", tasks: [] };
+  if (info.daysToExam === 1) return { info, title: "Véspera da prova", tasks: [["rest", 0, "Descanse, durma bem e confira documentos, local e horário da prova.", 0]] };
+  if (info.daysToExam < 0) return { info, title: "Prova realizada", tasks: [["review", 0, "Atualize a data da prova se for fazer de novo.", 0]] };
+  const ph = PHASES[info.phase];
+  const dow = (Math.floor((today() - S.plan.start) / DAY)) % 7;
+  return { info, title: ph.name + " · dia " + (dow + 1) + " de 7", tasks: ph.days[dow] };
+}
+const SKILL_NAME = { writing: "Writing", speaking: "Speaking", listening: "Listening", reading: "Reading", vocab: "Vocab", guide: "Guia", review: "Revisão", weak: "Ponto fraco", mock: "Simulado", rest: "Descanso" };
+function startTask(t) {
+  const [skill, n] = t;
+  if (skill === "guide") return openGuide(n);
+  if (skill === "writing") { if (n) { wTask = n; renderWTasks(); resetWTimer(); pickW(); } return go("writing"); }
+  if (skill === "speaking") { if (n) { sTask = n; renderSTasks(); pickS(); } return go("speaking"); }
+  if (skill === "listening") { if (n) { lPart = n; renderLParts(); } return go("listening"); }
+  if (skill === "reading") { if (n) { rPart = n; renderRParts(); } return go("reading"); }
+  if (skill === "vocab") return go("vocab");
+  if (skill === "weak") return go(weakestSkill());
+}
+function renderPlan() {
+  const { info, title, tasks } = todayTasks();
+  const key = dayKey(today());
+  const done = (S.plan.done && S.plan.done[key]) || [];
+  $("p-day").textContent = new Date().toLocaleDateString("pt-BR", { weekday: "long", day: "numeric", month: "short" });
+  $("p-title").textContent = title;
+  const mins = tasks.reduce((a, t) => a + t[3], 0);
+  $("p-mins").textContent = mins ? "~" + mins + " min" : "";
+  $("p-tasks").innerHTML = tasks.map((t, i) => {
+    const ok = done.includes(i);
+    const label = t[0] === "weak" ? t[2] + " (" + SKILL_NAME[weakestSkill()] + ")" : t[2];
+    const canGo = !["review", "rest", "mock"].includes(t[0]);
+    const link = t[0] === "mock" ? `<a href="https://www.celpip.ca" target="_blank" rel="noopener" class="muted" style="font-size:.85rem">celpip.ca</a>` : "";
+    return `<div class="list-item">
+      <label style="display:flex;gap:10px;align-items:flex-start;flex:1;min-width:0;cursor:pointer">
+        <input type="checkbox" data-pt="${i}" ${ok ? "checked" : ""} style="width:20px;height:20px;margin-top:2px;flex:0 0 auto">
+        <span style="${ok ? "text-decoration:line-through;color:var(--muted)" : ""}"><span class="pill">${SKILL_NAME[t[0]]}</span> ${esc(label)}${t[3] ? ` <span class="muted">· ${t[3]} min</span>` : ""} ${link}</span>
+      </label>
+      ${canGo ? `<button class="ghost small" data-go="${i}">Ir</button>` : ""}
+    </div>`;
+  }).join("");
+  $("p-bar").style.width = tasks.length ? (100 * done.length / tasks.length) + "%" : "0";
+  $("p-tasks").onclick = e => { const b = e.target.closest("[data-go]"); if (b) startTask(tasks[+b.dataset.go]); };
+  $("p-tasks").onchange = e => {
+    const c = e.target.closest("[data-pt]"); if (!c) return;
+    const i = +c.dataset.pt; S.plan.done = S.plan.done || {};
+    const list = new Set(S.plan.done[key] || []); c.checked ? list.add(i) : list.delete(i);
+    S.plan.done[key] = [...list];
+    // guarda só os últimos 60 dias
+    Object.keys(S.plan.done).sort().slice(0, -60).forEach(k => delete S.plan.done[k]);
+    if (c.checked) bumpActivity();
+    save(); renderPlan();
+  };
+  $("p-week").textContent = info.week <= info.totalW ? `semana ${info.week} de ${info.totalW}` : "após a prova";
+  $("p-phase-desc").textContent = PHASES[info.phase].desc;
+  $("p-phases").innerHTML = info.ranges.map(([k, a, b]) => {
+    const cur = k === info.phase, past = info.week > b;
+    return `<div class="list-item"><div><b style="${cur ? "color:var(--ink)" : past ? "color:var(--muted)" : ""}">${PHASES[k].name}</b>${cur ? ' <span class="pill ok">agora</span>' : past ? ' <span class="pill">concluída</span>' : ""}</div><span class="muted">${a === b ? "semana " + a : "semanas " + a + "–" + b}</span></div>`;
+  }).join("");
+}
+let restartArmed = false;
+$("p-restart").onclick = () => {
+  if (!restartArmed) { restartArmed = true; $("p-restart").textContent = "Toque de novo para confirmar"; return; }
+  restartArmed = false; $("p-restart").textContent = "Reiniciar plano hoje";
+  S.plan = { start: today(), done: {} }; save(); renderPlan(); toast("Plano reiniciado a partir de hoje.");
+};
+
 function avg(list) { return list.length ? list.reduce((a, b) => a + b, 0) / list.length : null; }
 function renderHome() {
   const d = new Date(S.settings.examDate + "T00:00:00");
@@ -604,8 +836,7 @@ function renderHome() {
   const lr = attempts.filter(x => (x.skill === "listening" || x.skill === "reading") && x.total).slice(0, 6);
   const pct = lr.length ? Math.round(100 * lr.reduce((a, x) => a + x.score, 0) / lr.reduce((a, x) => a + x.total, 0)) : null;
   $("h-lr").textContent = pct == null ? "–" : pct + "%";
-  const p = PLAN[new Date().getDay()];
-  $("h-plan-title").textContent = p[0]; $("h-plan").textContent = p[1]; $("h-plan-go").onclick = () => go(p[2]);
+  renderPlan();
   $("h-count").textContent = attempts.length + (attempts.length === 1 ? " treino" : " treinos");
   const names = { writing: "Writing", speaking: "Speaking", listening: "Listening", reading: "Reading" };
   $("h-hist").innerHTML = attempts.length ? attempts.slice(0, 15).map(a => {
@@ -1058,6 +1289,7 @@ $("v-list").addEventListener("click", e => {
    INÍCIO
    ===================================================================== */
 function renderAll() {
+  renderGuides();
   renderWTasks(); if (!wPrompt) pickW(); resetWTimer();
   renderSTasks(); if (!sPrompt) pickS();
   renderLParts(); renderRParts();
